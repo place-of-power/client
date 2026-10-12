@@ -1,0 +1,24 @@
+#!/bin/bash
+
+set -e
+
+# Определяем директорию _infrastructure (чтобы скрипт работал из любого места)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR"
+
+#1. Создаём .env файлы
+source "$SCRIPT_DIR/_scripts/init-env.sh"
+
+#2. Собираем и поднимаем контейнеры (node-base соберётся первым, как зависимость)
+docker compose up -d --build
+
+#3. Устанавливаем зависимости
+source "$SCRIPT_DIR/npm" install
+
+#4. Запускаем dev-сервер Vite (если ещё не запущен)
+if docker compose exec -T node-cli sh -c "pgrep -f 'vite' >/dev/null 2>&1"; then
+    echo "Vite dev server already running (vite: 5173, nginx: 8090)"
+else
+    docker compose exec -T -d node-cli npm run dev -- --host 0.0.0.0
+    echo "Vite dev server started (vite: 5173, nginx: 8090)"
+fi

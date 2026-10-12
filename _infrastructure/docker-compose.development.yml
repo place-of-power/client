@@ -1,0 +1,4 @@
+services:
+    nginx:
+        volumes:
+            - ./nginx/development/conf.d:/etc/nginx/conf.d/

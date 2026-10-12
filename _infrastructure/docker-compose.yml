@@ -1,0 +1,46 @@
+services:
+    node-base:
+        build:
+            context: ..
+            dockerfile: ./_infrastructure/node/base/Dockerfile
+            args:
+                NODE_VERSION: ${NODE_VERSION}
+                PUID: ${PUID}
+                PGID: ${PGID}
+        image: node-base
+        container_name: node-base.${COMPOSE_PROJECT_NAME}
+        environment:
+            TZ: ${TIMEZONE}
+
+    node-cli:
+        build:
+            context: ..
+            dockerfile: ./_infrastructure/node/cli/Dockerfile
+        container_name: node-cli.${COMPOSE_PROJECT_NAME}
+        restart: always
+        tty: true
+        working_dir: /var/www/app
+        environment:
+            TZ: ${TIMEZONE}
+        ports:
+            - "${VITE_PORT}:5173"
+        volumes:
+            - .././:/var/www/app
+        depends_on:
+            - node-base
+        command: ["sleep", "infinity"]
+
+    nginx:
+        image: nginx:alpine
+        container_name: nginx.${COMPOSE_PROJECT_NAME}
+        restart: always
+        ports:
+            - "${NGINX_PORT}:80"
+        environment:
+            TZ: ${TIMEZONE}
+        working_dir: /var/www/app
+        volumes:
+            - .././:/var/www/app
+            - ./${LOGS_DIR}/nginx:/var/log/nginx
+        links:
+            - node-cli

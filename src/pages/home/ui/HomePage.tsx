@@ -38,7 +38,7 @@ class HomePage extends Component<HomePageProps, HomePageState> {
         const { articles, categories, loading } = this.state
 
         return (
-            <main className="home">
+            <main className="page">
                 <section className="home-hero">
                     <HeroTitle>Place of Power</HeroTitle>
                     <HeroSubtitle>

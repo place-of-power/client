@@ -3,12 +3,11 @@
     flex-direction: column;
     height: 100%;
     overflow: hidden;
-    text-align: left;
     color: inherit;
     text-decoration: none;
     background: var(--bg);
     border: 1px solid var(--border);
-    border-radius: 16px;
+    border-radius: var(--radius-xl);
     transition:
         border-color 0.15s ease,
         box-shadow 0.15s ease;
@@ -33,14 +32,14 @@
     font-weight: 600;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: #fff;
+    color: var(--on-accent);
     background:
         radial-gradient(
             120% 140% at 18% 10%,
             rgba(255, 255, 255, 0.18),
             transparent 55%
         ),
-        linear-gradient(135deg, #f97316 0%, #ef4444 55%, #dc2626 100%);
+        var(--cover-gradient);
 }
 
 .article-card-body {

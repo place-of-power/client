@@ -3,10 +3,9 @@
     align-items: center;
     gap: 16px;
     padding: 22px 24px;
-    text-align: left;
     background: var(--bg);
     border: 1px solid var(--border);
-    border-radius: 16px;
+    border-radius: var(--radius-xl);
 }
 
 .category-tile-monogram {
@@ -17,9 +16,9 @@
     height: 52px;
     font-size: 19px;
     font-weight: 700;
-    color: #fff;
-    border-radius: 14px;
-    background: linear-gradient(135deg, #f97316 0%, #dc2626 100%);
+    color: var(--on-accent);
+    border-radius: var(--radius-lg);
+    background: var(--brand-gradient);
 }
 
 .category-tile-name {

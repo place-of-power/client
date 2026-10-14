@@ -7,7 +7,20 @@
     --accent: #ea580c;
     --accent-bg: rgba(234, 88, 12, 0.1);
     --accent-border: rgba(234, 88, 12, 0.5);
-    --social-bg: rgba(244, 243, 236, 0.5);
+    --on-accent: #fff;
+    --brand-gradient: linear-gradient(135deg, #f97316 0%, #dc2626 100%);
+    --brand-gradient-horizontal: linear-gradient(90deg, #f97316, #dc2626);
+    --cover-gradient: linear-gradient(135deg, #f97316 0%, #ef4444 55%, #dc2626 100%);
+
+    --radius-sm: 10px;
+    --radius-md: 12px;
+    --radius-lg: 14px;
+    --radius-xl: 16px;
+    --radius-pill: 999px;
+
+    --container: 1126px;
+    --gutter: 24px;
+
     --shadow:
         rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
 
@@ -44,7 +57,6 @@
     --accent: #fb923c;
     --accent-bg: rgba(251, 146, 60, 0.15);
     --accent-border: rgba(251, 146, 60, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
     --shadow:
         rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
 }
@@ -59,17 +71,15 @@
         --accent: #fb923c;
         --accent-bg: rgba(251, 146, 60, 0.15);
         --accent-border: rgba(251, 146, 60, 0.5);
-        --social-bg: rgba(47, 48, 58, 0.5);
         --shadow:
             rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
     }
 }
 
 #root {
-    width: 1126px;
+    width: var(--container);
     max-width: 100%;
     margin: 0 auto;
-    text-align: center;
     border-inline: 1px solid var(--border);
     min-height: 100svh;
     display: flex;
@@ -77,8 +87,20 @@
     box-sizing: border-box;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     margin: 0;
+}
+
+.page {
+    width: 100%;
+    box-sizing: border-box;
+    max-width: var(--container);
+    margin: 0 auto;
+    padding: 48px var(--gutter) 72px;
 }
 
 h1,
@@ -110,15 +132,11 @@ p {
     margin: 0;
 }
 
-code,
-.counter {
+code {
     font-family: var(--mono);
     display: inline-flex;
     border-radius: 4px;
     color: var(--text-h);
-}
-
-code {
     font-size: 15px;
     line-height: 135%;
     padding: 4px 8px;

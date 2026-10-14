@@ -4,6 +4,8 @@
     height: 100%;
     overflow: hidden;
     text-align: left;
+    color: inherit;
+    text-decoration: none;
     background: var(--bg);
     border: 1px solid var(--border);
     border-radius: 16px;
@@ -15,6 +17,11 @@
 .article-card:hover {
     border-color: var(--accent-border);
     box-shadow: var(--shadow);
+}
+
+.article-card:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
 }
 
 .article-card-cover {
@@ -50,11 +57,10 @@
     line-height: 1.25;
     letter-spacing: -0.01em;
     color: var(--text-h);
-    text-decoration: none;
     transition: color 0.15s ease;
 }
 
-.article-card-title:hover {
+.article-card:hover .article-card-title {
     color: var(--accent);
 }
 

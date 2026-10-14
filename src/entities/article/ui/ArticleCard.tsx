@@ -12,18 +12,16 @@ class ArticleCard extends Component<ArticleCardProps> {
         const { article } = this.props
 
         return (
-            <article className="article-card">
+            <Link className="article-card" to={`/articles/${article.slug}`}>
                 <div className="article-card-cover">{article.category.name}</div>
                 <div className="article-card-body">
-                    <Link className="article-card-title" to={`/articles/${article.slug}`}>
-                        {article.title}
-                    </Link>
+                    <h3 className="article-card-title">{article.title}</h3>
                     <p className="article-card-description">{article.description}</p>
                     <div className="article-card-meta">
                         {article.publishedAt} · {article.readingTime}
                     </div>
                 </div>
-            </article>
+            </Link>
         )
     }
 }

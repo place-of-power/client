@@ -1,0 +1,21 @@
+.link-button {
+    display: inline-block;
+    padding: 10px 18px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--accent);
+    text-decoration: none;
+    background: var(--accent-bg);
+    border: 1px solid var(--accent-border);
+    border-radius: 10px;
+    transition:
+        color 0.15s ease,
+        background 0.15s ease,
+        border-color 0.15s ease;
+}
+
+.link-button:hover {
+    color: #fff;
+    background: var(--accent);
+    border-color: var(--accent);
+}

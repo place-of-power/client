@@ -1,9 +1,9 @@
 import { Component } from 'react'
-import { Link } from 'react-router-dom'
 import { fetchArticles, fetchCategories } from '@/shared/api'
 import { paths } from '@/shared/config'
 import type { ArticlePreview } from '@/shared/api'
 import type { Category } from '@/shared/model/category'
+import { LinkButton } from '@/shared/ui'
 import { SearchBar } from '@/features/article-search'
 import { ArticleGrid } from '@/widgets/article-grid'
 import { CategoryTiles } from '@/widgets/category-tiles'
@@ -52,9 +52,7 @@ class HomePage extends Component<HomePageProps, HomePageState> {
                     <div className="home-sections">
                         <div className="home-categories">
                             <CategoryTiles categories={categories} />
-                            <Link className="home-all-categories" to={paths.categories}>
-                                Все категории
-                            </Link>
+                            <LinkButton to={paths.categories}>Все категории</LinkButton>
                         </div>
                         <ArticleGrid title="Последние статьи" articles={articles} />
                     </div>

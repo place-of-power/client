@@ -1,6 +1,7 @@
 import { Component } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { ArticlePageRoute } from '@/pages/article'
+import { CategoriesPage } from '@/pages/categories'
 import { HomePage } from '@/pages/home'
 import { Header } from '@/widgets/header'
 
@@ -11,6 +12,7 @@ class App extends Component {
                 <Header />
                 <Routes>
                     <Route path="/" element={<HomePage />} />
+                    <Route path="/categories" element={<CategoriesPage />} />
                     <Route path="/articles/:slug" element={<ArticlePageRoute />} />
                     <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>

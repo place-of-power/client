@@ -33,6 +33,9 @@ class Header extends Component {
         this.setState({ theme })
     }
 
+    navLinkClass = ({ isActive }: { isActive: boolean }) =>
+        isActive ? 'header-nav-link header-nav-link--active' : 'header-nav-link'
+
     render() {
         const { theme } = this.state
 
@@ -46,16 +49,11 @@ class Header extends Component {
                         <span className="header-logo-text">Place of Power</span>
                     </Link>
                     <nav className="header-nav">
-                        <NavLink
-                            className={({ isActive }) =>
-                                isActive
-                                    ? 'header-nav-link header-nav-link--active'
-                                    : 'header-nav-link'
-                            }
-                            to="/"
-                            end
-                        >
+                        <NavLink className={this.navLinkClass} to="/" end>
                             Главная
+                        </NavLink>
+                        <NavLink className={this.navLinkClass} to="/categories">
+                            Категории
                         </NavLink>
                     </nav>
                     <button

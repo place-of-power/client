@@ -5,11 +5,12 @@ import './CategoryTiles.css'
 
 interface CategoryTilesProps {
     categories: Category[]
+    heading?: boolean
 }
 
 class CategoryTiles extends Component<CategoryTilesProps> {
     render() {
-        const { categories } = this.props
+        const { categories, heading = true } = this.props
 
         if (categories.length === 0) {
             return null
@@ -17,7 +18,7 @@ class CategoryTiles extends Component<CategoryTilesProps> {
 
         return (
             <section className="category-tiles">
-                <h2 className="category-tiles-title">Категории</h2>
+                {heading && <h2 className="category-tiles-title">Категории</h2>}
                 <div className="category-tiles-grid">
                     {categories.map((category) => (
                         <CategoryTile key={category.id} category={category} />

@@ -1,0 +1,16 @@
+.categories-page {
+    width: 100%;
+    box-sizing: border-box;
+    max-width: 1060px;
+    margin: 0 auto;
+    padding: 48px 24px 72px;
+    text-align: left;
+}
+
+.categories-page-title {
+    margin: 0 0 28px;
+    font-size: clamp(2rem, 5vw, 3rem);
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: var(--text-h);
+}

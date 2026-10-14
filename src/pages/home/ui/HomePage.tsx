@@ -1,4 +1,5 @@
 import { Component } from 'react'
+import { Link } from 'react-router-dom'
 import { fetchArticles, fetchCategories } from '@/shared/api'
 import type { ArticlePreview } from '@/shared/api'
 import type { Category } from '@/shared/model/category'
@@ -48,7 +49,12 @@ class HomePage extends Component<HomePageProps, HomePageState> {
 
                 {!loading && (
                     <div className="home-sections">
-                        <CategoryTiles categories={categories} />
+                        <div className="home-categories">
+                            <CategoryTiles categories={categories} />
+                            <Link className="home-all-categories" to="/categories">
+                                Все категории
+                            </Link>
+                        </div>
                         <ArticleGrid title="Последние статьи" articles={articles} />
                     </div>
                 )}

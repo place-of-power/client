@@ -1,5 +1,6 @@
 import { Component } from 'react'
 import { Link, NavLink } from 'react-router-dom'
+import { paths } from '@/shared/config'
 import { BoltIcon, MoonIcon, SunIcon } from '@/shared/ui/icons'
 import './Header.css'
 
@@ -42,17 +43,17 @@ class Header extends Component {
         return (
             <header className="header">
                 <div className="header-inner">
-                    <Link className="header-logo" to="/">
+                    <Link className="header-logo" to={paths.home}>
                         <span className="header-logo-mark" aria-hidden="true">
                             <BoltIcon />
                         </span>
                         <span className="header-logo-text">Place of Power</span>
                     </Link>
                     <nav className="header-nav">
-                        <NavLink className={this.navLinkClass} to="/" end>
+                        <NavLink className={this.navLinkClass} to={paths.home} end>
                             Главная
                         </NavLink>
-                        <NavLink className={this.navLinkClass} to="/categories">
+                        <NavLink className={this.navLinkClass} to={paths.categories}>
                             Категории
                         </NavLink>
                     </nav>

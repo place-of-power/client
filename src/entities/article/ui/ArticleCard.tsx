@@ -1,6 +1,7 @@
 import { Component } from 'react'
 import { Link } from 'react-router-dom'
 import type { ArticlePreview } from '@/shared/api'
+import { paths } from '@/shared/config'
 import './ArticleCard.css'
 
 interface ArticleCardProps {
@@ -12,7 +13,7 @@ class ArticleCard extends Component<ArticleCardProps> {
         const { article } = this.props
 
         return (
-            <Link className="article-card" to={`/articles/${article.slug}`}>
+            <Link className="article-card" to={paths.article(article.slug)}>
                 <div className="article-card-cover">{article.category.name}</div>
                 <div className="article-card-body">
                     <h3 className="article-card-title">{article.title}</h3>

@@ -3,6 +3,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { ArticlePageRoute } from '@/pages/article'
 import { CategoriesPage } from '@/pages/categories'
 import { HomePage } from '@/pages/home'
+import { ROUTES } from '@/shared/config'
 import { Header } from '@/widgets/header'
 
 class App extends Component {
@@ -11,10 +12,10 @@ class App extends Component {
             <BrowserRouter>
                 <Header />
                 <Routes>
-                    <Route path="/" element={<HomePage />} />
-                    <Route path="/categories" element={<CategoriesPage />} />
-                    <Route path="/articles/:slug" element={<ArticlePageRoute />} />
-                    <Route path="*" element={<Navigate to="/" replace />} />
+                    <Route path={ROUTES.home} element={<HomePage />} />
+                    <Route path={ROUTES.categories} element={<CategoriesPage />} />
+                    <Route path={ROUTES.article} element={<ArticlePageRoute />} />
+                    <Route path="*" element={<Navigate to={ROUTES.home} replace />} />
                 </Routes>
             </BrowserRouter>
         )

@@ -1,0 +1,7 @@
+.hero-title {
+    margin: 0 0 14px;
+    font-size: clamp(2rem, 5vw, 3rem);
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: var(--text-h);
+}

@@ -1,6 +1,7 @@
 import { Component } from 'react'
 import { fetchCategories } from '@/shared/api'
 import type { Category } from '@/shared/model/category'
+import { HeroTitle } from '@/shared/ui'
 import { CategoryTiles } from '@/widgets/category-tiles'
 import './CategoriesPage.css'
 
@@ -32,7 +33,7 @@ class CategoriesPage extends Component<CategoriesPageProps, CategoriesPageState>
 
         return (
             <main className="categories-page">
-                <h1 className="categories-page-title">Категории</h1>
+                <HeroTitle>Категории</HeroTitle>
                 {!loading && <CategoryTiles categories={categories} heading={false} />}
             </main>
         )

@@ -11,22 +11,6 @@
     margin-bottom: 40px;
 }
 
-.home-hero-title {
-    margin: 0 0 14px;
-    font-size: clamp(2rem, 5vw, 3rem);
-    line-height: 1.1;
-    letter-spacing: -0.03em;
-    color: var(--text-h);
-}
-
-.home-hero-subtitle {
-    max-width: 620px;
-    margin: 0;
-    font-size: 18px;
-    line-height: 1.6;
-    color: var(--text);
-}
-
 .home-hero .search-bar {
     margin-top: 24px;
 }

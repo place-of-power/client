@@ -1,0 +1,35 @@
+.category-tile {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 22px 24px;
+    text-align: left;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+}
+
+.category-tile-monogram {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 52px;
+    height: 52px;
+    font-size: 19px;
+    font-weight: 700;
+    color: #fff;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #f97316 0%, #dc2626 100%);
+}
+
+.category-tile-name {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-h);
+}
+
+.category-tile-count {
+    margin-left: auto;
+    font-size: 14px;
+    color: var(--text);
+}

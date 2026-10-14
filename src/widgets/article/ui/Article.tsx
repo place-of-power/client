@@ -1,14 +1,13 @@
 import { Component, createRef } from 'react'
 import 'highlight.js/styles/github-dark.css'
 import { parseMarkdown, type TocHeading } from '@/shared/lib/markdown'
-import type { ArticleMeta } from '@/entities/article'
+import type { Article as ArticleData } from '@/entities/article'
 import './Article.css'
 
 interface ArticleProps {
-    title: string
-    excerpt: string
-    meta: ArticleMeta
-    content: string
+    article: ArticleData
+    author: string
+    role: string
 }
 
 interface ArticleState {
@@ -16,7 +15,7 @@ interface ArticleState {
 }
 
 class Article extends Component<ArticleProps, ArticleState> {
-    private readonly markdown = parseMarkdown(this.props.content)
+    private readonly markdown = parseMarkdown(this.props.article.content)
     private readonly bodyRef = createRef<HTMLDivElement>()
     private frame = 0
 
@@ -88,16 +87,8 @@ class Article extends Component<ArticleProps, ArticleState> {
         this.setState({ activeId: id })
     }
 
-    renderTags() {
-        return (
-            <ul className="article-tags">
-                {this.props.meta.tags.map((tag, index) => (
-                    <li key={`${tag}-${index}`}>
-                        <span className="article-tag">{tag}</span>
-                    </li>
-                ))}
-            </ul>
-        )
+    renderCategory() {
+        return <span className="article-category">{this.props.article.category.name}</span>
     }
 
     renderAuthorInitials(author: string) {
@@ -143,7 +134,7 @@ class Article extends Component<ArticleProps, ArticleState> {
     }
 
     render() {
-        const { title, excerpt, meta } = this.props
+        const { article, author, role } = this.props
 
         return (
             <article className="article">
@@ -151,17 +142,17 @@ class Article extends Component<ArticleProps, ArticleState> {
 
                 <div className="article-wrap">
                     <header className="article-header">
-                        {this.renderTags()}
-                        <h1 className="article-title">{title}</h1>
-                        <p className="article-excerpt">{excerpt}</p>
+                        {this.renderCategory()}
+                        <h1 className="article-title">{article.title}</h1>
+                        <p className="article-description">{article.description}</p>
                         <div className="article-meta">
                             <span className="article-avatar">
-                                {this.renderAuthorInitials(meta.author)}
+                                {this.renderAuthorInitials(author)}
                             </span>
                             <div className="article-meta-text">
-                                <span className="article-author">{meta.author}</span>
+                                <span className="article-author">{author}</span>
                                 <span className="article-meta-details">
-                                    {meta.publishedAt} · {meta.readingTime}
+                                    {article.publishedAt} · {article.readingTime}
                                 </span>
                             </div>
                         </div>
@@ -177,17 +168,17 @@ class Article extends Component<ArticleProps, ArticleState> {
 
                             <footer className="article-author-box">
                                 <span className="article-author-box-avatar">
-                                    {this.renderAuthorInitials(meta.author)}
+                                    {this.renderAuthorInitials(author)}
                                 </span>
                                 <div className="article-author-box-text">
                                     <span className="article-author-box-label">
                                         Автор статьи
                                     </span>
                                     <span className="article-author-box-name">
-                                        {meta.author}
+                                        {author}
                                     </span>
                                     <span className="article-author-box-role">
-                                        {meta.role}
+                                        {role}
                                     </span>
                                 </div>
                             </footer>

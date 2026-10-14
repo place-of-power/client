@@ -1,0 +1,15 @@
+.page-status {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 64px 24px;
+    text-align: center;
+    color: var(--text);
+}
+
+.page-status a {
+    color: var(--accent);
+}

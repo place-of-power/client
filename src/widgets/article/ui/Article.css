@@ -38,17 +38,9 @@ html {
     padding: 48px 24px 64px;
 }
 
-.article-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin: 0 0 18px;
-    padding: 0;
-    list-style: none;
-}
-
-.article-tag {
+.article-category {
     display: inline-flex;
+    align-self: flex-start;
     align-items: center;
     padding: 5px 12px;
     font-size: 13px;
@@ -75,7 +67,7 @@ html {
     color: var(--text-h);
 }
 
-.article-excerpt {
+.article-description {
     margin: 0;
     font-size: 20px;
     line-height: 1.6;
@@ -404,7 +396,7 @@ html {
         padding: 28px 18px 44px;
     }
 
-    .article-excerpt {
+    .article-description {
         font-size: 18px;
     }
 }

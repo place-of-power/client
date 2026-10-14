@@ -1,1 +1,2 @@
-export type { ArticleMeta } from './model/types.ts'
+export { default as ArticleCard } from './ui/ArticleCard.tsx'
+export type { Article, ArticlePreview } from '@/shared/api'

@@ -1,6 +1,7 @@
 import { Component, createRef } from 'react'
 import 'highlight.js/styles/github-dark.css'
 import { parseMarkdown, type TocHeading } from '@/shared/lib/markdown'
+import { HeroSubtitle, HeroTitle } from '@/shared/ui'
 import type { Article as ArticleData } from '@/entities/article'
 import './Article.css'
 
@@ -143,8 +144,8 @@ class Article extends Component<ArticleProps, ArticleState> {
                 <div className="article-wrap">
                     <header className="article-header">
                         {this.renderCategory()}
-                        <h1 className="article-title">{article.title}</h1>
-                        <p className="article-description">{article.description}</p>
+                        <HeroTitle>{article.title}</HeroTitle>
+                        <HeroSubtitle>{article.description}</HeroSubtitle>
                         <div className="article-meta">
                             <span className="article-avatar">
                                 {this.renderAuthorInitials(author)}

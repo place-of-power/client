@@ -1,5 +1,6 @@
 import { Component } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
+import { BoltIcon, MoonIcon, SunIcon } from '@/shared/ui/icons'
 import './Header.css'
 
 type Theme = 'light' | 'dark'
@@ -39,12 +40,23 @@ class Header extends Component {
             <header className="header">
                 <div className="header-inner">
                     <Link className="header-logo" to="/">
-                        Place of Power
+                        <span className="header-logo-mark" aria-hidden="true">
+                            <BoltIcon />
+                        </span>
+                        <span className="header-logo-text">Place of Power</span>
                     </Link>
                     <nav className="header-nav">
-                        <Link className="header-nav-link" to="/">
+                        <NavLink
+                            className={({ isActive }) =>
+                                isActive
+                                    ? 'header-nav-link header-nav-link--active'
+                                    : 'header-nav-link'
+                            }
+                            to="/"
+                            end
+                        >
                             Главная
-                        </Link>
+                        </NavLink>
                     </nav>
                     <button
                         className="header-theme"
@@ -52,7 +64,11 @@ class Header extends Component {
                         onClick={this.toggleTheme}
                         aria-label="Переключить тему"
                     >
-                        {theme === 'dark' ? 'Светлая тема' : 'Тёмная тема'}
+                        {theme === 'dark' ? (
+                            <SunIcon className="header-theme-icon" />
+                        ) : (
+                            <MoonIcon className="header-theme-icon" />
+                        )}
                     </button>
                 </div>
             </header>

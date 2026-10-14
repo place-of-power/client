@@ -3,6 +3,9 @@
     top: 0;
     z-index: 10;
     background: var(--bg);
+    background: color-mix(in srgb, var(--bg) 82%, transparent);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--border);
 }
 
@@ -12,15 +15,35 @@
     gap: 24px;
     max-width: 1126px;
     margin: 0 auto;
-    padding: 14px 24px;
+    padding: 12px 24px;
 }
 
 .header-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
     font-size: 18px;
     font-weight: 700;
     letter-spacing: -0.02em;
     color: var(--text-h);
     text-decoration: none;
+}
+
+.header-logo-mark {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    color: #fff;
+    border-radius: 9px;
+    background: linear-gradient(135deg, #f97316 0%, #dc2626 100%);
+    box-shadow: 0 4px 12px -4px rgba(220, 38, 38, 0.6);
+}
+
+.header-logo-mark svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
 }
 
 .header-nav {
@@ -29,6 +52,8 @@
 }
 
 .header-nav-link {
+    position: relative;
+    padding: 4px 0;
     font-size: 15px;
     color: var(--text);
     text-decoration: none;
@@ -39,19 +64,51 @@
     color: var(--text-h);
 }
 
-.header-theme {
-    margin-left: auto;
-    padding: 8px 14px;
-    font: inherit;
-    font-size: 14px;
+.header-nav-link--active {
     color: var(--text-h);
-    background: var(--bg);
+}
+
+.header-nav-link--active::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -4px;
+    height: 2px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, #f97316, #dc2626);
+}
+
+.header-theme {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    margin-left: auto;
+    padding: 0;
+    color: var(--text);
+    background: transparent;
     border: 1px solid var(--border);
-    border-radius: 999px;
+    border-radius: 10px;
     cursor: pointer;
-    transition: border-color 0.15s ease;
+    transition:
+        color 0.15s ease,
+        border-color 0.15s ease,
+        background 0.15s ease;
 }
 
 .header-theme:hover {
+    color: var(--accent);
     border-color: var(--accent-border);
+    background: var(--accent-bg);
+}
+
+.header-theme-icon {
+    width: 19px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
 }

@@ -1,5 +1,5 @@
 import { Component, createRef } from 'react'
-import { ChevronIcon } from './icons/index.ts'
+import { ChevronIcon } from '../icons/index.ts'
 import './Select.css'
 
 interface SelectOption {

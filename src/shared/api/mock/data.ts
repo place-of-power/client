@@ -27,6 +27,7 @@ export const mockArticles: Article[] = [
         description:
             'Разбираем tsvector, GIN-индексы и кастомный русско-английский словарь для поиска по статьям.',
         category: category('postgresql'),
+        status: 'published',
         publishedAt: '2026-10-12',
         readingTime: '5 мин чтения',
         content: [
@@ -59,6 +60,7 @@ export const mockArticles: Article[] = [
         description:
             'Чем отличаются bind mount, named volume и tmpfs и когда что использовать в разработке.',
         category: category('docker'),
+        status: 'published',
         publishedAt: '2026-10-05',
         readingTime: '6 мин чтения',
         content: [
@@ -87,6 +89,7 @@ export const mockArticles: Article[] = [
         description:
             'Как организовать CQRS-lite на командах, обработчиках и `#[AsMessageHandler]` без лишней инфраструктуры.',
         category: category('symfony'),
+        status: 'published',
         publishedAt: '2026-09-28',
         readingTime: '7 мин чтения',
         content: [
@@ -116,6 +119,7 @@ export const mockArticles: Article[] = [
         description:
             'Инкапсуляция правил в небольших неизменяемых объектах вместо примитивов и валидации по коду.',
         category: category('php'),
+        status: 'published',
         publishedAt: '2026-09-20',
         readingTime: '4 мин чтения',
         content: [
@@ -146,6 +150,7 @@ export const mockArticles: Article[] = [
         description:
             'Последовательные и параллельные операции, обработка ошибок и отмена через `AbortController`.',
         category: category('javascript'),
+        status: 'published',
         publishedAt: '2026-09-15',
         readingTime: '5 мин чтения',
         content: [
@@ -168,6 +173,7 @@ export const mockArticles: Article[] = [
         description:
             'Переиспользуемая логика через функции `use*` вместо миксинов и наследования компонентов.',
         category: category('vue'),
+        status: 'published',
         publishedAt: '2026-09-08',
         readingTime: '6 мин чтения',
         content: [

@@ -56,6 +56,9 @@ class Header extends Component {
                         <NavLink className={this.navLinkClass} to={paths.categories}>
                             Категории
                         </NavLink>
+                        <NavLink className={this.navLinkClass} to={paths.create}>
+                            Создать
+                        </NavLink>
                     </nav>
                     <button
                         className="header-theme"

@@ -4,10 +4,12 @@ export const ROUTES = {
     home: '/',
     categories: '/categories',
     article: '/articles/:slug',
+    create: '/create',
 } as const
 
 export const paths = {
     home: ROUTES.home,
     categories: ROUTES.categories,
     article: (slug: string) => generatePath(ROUTES.article, { slug }),
+    create: ROUTES.create,
 }

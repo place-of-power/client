@@ -1,7 +1,6 @@
 import { Component, createRef } from 'react'
-import 'highlight.js/styles/github-dark.css'
 import { parseMarkdown, type TocHeading } from '@/shared/lib/markdown'
-import { HeroSubtitle, HeroTitle } from '@/shared/ui'
+import { HeroSubtitle, HeroTitle, MarkdownContent } from '@/shared/ui'
 import type { Article as ArticleData } from '@/entities/article'
 import './Article.css'
 
@@ -161,10 +160,9 @@ class Article extends Component<ArticleProps, ArticleState> {
 
                     <div className="article-layout">
                         <div className="article-main">
-                            <div
-                                className="article-body"
-                                ref={this.bodyRef}
-                                dangerouslySetInnerHTML={{ __html: this.markdown.html }}
+                            <MarkdownContent
+                                html={this.markdown.html}
+                                innerRef={this.bodyRef}
                             />
 
                             <footer className="article-author-box">

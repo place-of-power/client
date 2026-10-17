@@ -8,6 +8,13 @@ interface CategoriesResponse {
 
 const pending = new Map<string, Promise<Category[]>>()
 
+const created: Category[] = []
+
+// shortcut: категории, созданные на клиенте, живут только в памяти — на сервере пока нет POST /categories
+export function addCategory(category: Category): void {
+    created.push(category)
+}
+
 async function requestCategories(url: string): Promise<Category[]> {
     const response = await fetch(url)
 
@@ -17,7 +24,9 @@ async function requestCategories(url: string): Promise<Category[]> {
 
     const { data } = (await response.json()) as CategoriesResponse
 
-    return data
+    return [...data, ...created].sort(
+        (left, right) => (left.sortOrder ?? 0) - (right.sortOrder ?? 0),
+    )
 }
 
 export function fetchCategories(limit?: number): Promise<Category[]> {

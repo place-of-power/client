@@ -73,9 +73,13 @@ class ArticleForm extends Component<ArticleFormProps, ArticleFormState> {
     }
 
     async loadCategories() {
-        const categories = await fetchCategories()
+        try {
+            const categories = await fetchCategories()
 
-        this.setState({ categories, categoryId: categories[0]?.id ?? '' })
+            this.setState({ categories, categoryId: categories[0]?.id ?? '' })
+        } catch {
+            this.setState({ error: 'Не удалось загрузить категории.' })
+        }
     }
 
     handleTitleChange = (event: ChangeEvent<HTMLInputElement>) => {

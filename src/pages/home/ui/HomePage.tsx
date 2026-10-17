@@ -9,12 +9,15 @@ import { ArticleGrid } from '@/widgets/article-grid'
 import { CategoryTiles } from '@/widgets/category-tiles'
 import './HomePage.css'
 
+const HOME_CATEGORIES_LIMIT = 6
+
 type HomePageProps = Record<string, never>
 
 interface HomePageState {
     articles: ArticlePreview[]
     categories: Category[]
     loading: boolean
+    error: string
 }
 
 class HomePage extends Component<HomePageProps, HomePageState> {
@@ -22,6 +25,7 @@ class HomePage extends Component<HomePageProps, HomePageState> {
         articles: [],
         categories: [],
         loading: true,
+        error: '',
     }
 
     componentDidMount() {
@@ -29,13 +33,20 @@ class HomePage extends Component<HomePageProps, HomePageState> {
     }
 
     async load() {
-        const [articles, categories] = await Promise.all([fetchArticles(), fetchCategories()])
+        try {
+            const [articles, categories] = await Promise.all([
+                fetchArticles(),
+                fetchCategories(HOME_CATEGORIES_LIMIT),
+            ])
 
-        this.setState({ articles, categories, loading: false })
+            this.setState({ articles, categories, loading: false })
+        } catch {
+            this.setState({ error: 'Не удалось загрузить данные с сервера.', loading: false })
+        }
     }
 
     render() {
-        const { articles, categories, loading } = this.state
+        const { articles, categories, loading, error } = this.state
 
         return (
             <main className="page">
@@ -48,7 +59,9 @@ class HomePage extends Component<HomePageProps, HomePageState> {
                     <SearchBar />
                 </section>
 
-                {!loading && (
+                {!loading && error && <p className="page-status">{error}</p>}
+
+                {!loading && !error && (
                     <div className="home-sections">
                         <div className="home-categories">
                             <CategoryTiles categories={categories} />

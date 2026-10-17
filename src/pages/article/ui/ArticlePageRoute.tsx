@@ -3,7 +3,6 @@ import { Link, useParams } from 'react-router-dom'
 import { fetchArticle } from '@/shared/api'
 import type { Article as ArticleData } from '@/shared/api'
 import { Article } from '@/widgets/article'
-import './ArticlePageRoute.css'
 
 interface ArticlePageViewProps {
     slug: string

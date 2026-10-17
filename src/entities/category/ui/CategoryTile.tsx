@@ -1,4 +1,6 @@
 import { Component } from 'react'
+import { Link } from 'react-router-dom'
+import { paths } from '@/shared/config'
 import type { Category } from '@/shared/model/category'
 import './CategoryTile.css'
 
@@ -16,7 +18,7 @@ class CategoryTile extends Component<CategoryTileProps> {
         const { category, count } = this.props
 
         return (
-            <div className="category-tile">
+            <Link className="category-tile" to={paths.category(category.slug)}>
                 <span className="category-tile-monogram">
                     {this.renderMonogram(category.name)}
                 </span>
@@ -24,7 +26,7 @@ class CategoryTile extends Component<CategoryTileProps> {
                 {typeof count === 'number' && (
                     <span className="category-tile-count">{count}</span>
                 )}
-            </div>
+            </Link>
         )
     }
 }

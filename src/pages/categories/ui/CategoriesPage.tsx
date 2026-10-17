@@ -22,9 +22,13 @@ class CategoriesPage extends Component<CategoriesPageProps, CategoriesPageState>
     }
 
     async load() {
-        const categories = await fetchCategories()
+        try {
+            const categories = await fetchCategories()
 
-        this.setState({ categories, loading: false })
+            this.setState({ categories, loading: false })
+        } catch {
+            this.setState({ loading: false })
+        }
     }
 
     render() {

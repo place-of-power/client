@@ -4,7 +4,7 @@ import { createArticle, fetchCategories } from '@/shared/api'
 import type { ArticleInput } from '@/shared/api'
 import { parseMarkdown } from '@/shared/lib/markdown'
 import type { ArticleStatus, Category } from '@/shared/model'
-import { MarkdownContent, Select } from '@/shared/ui'
+import { MarkdownContent, Select, SubmitButton } from '@/shared/ui'
 import './ArticleForm.css'
 
 interface MarkdownTool {
@@ -162,13 +162,13 @@ class ArticleForm extends Component<ArticleFormProps, ArticleFormState> {
         const previewHtml = parseMarkdown(content).html
 
         return (
-            <form className="article-form" onSubmit={this.handleSubmit}>
-                <div className="article-form-field">
-                    <label className="article-form-label" htmlFor="article-form-title">
+            <form className="form" onSubmit={this.handleSubmit}>
+                <div className="form-field">
+                    <label className="form-label" htmlFor="article-form-title">
                         Заголовок
                     </label>
                     <input
-                        className="article-form-input"
+                        className="form-input"
                         id="article-form-title"
                         type="text"
                         value={title}
@@ -177,9 +177,9 @@ class ArticleForm extends Component<ArticleFormProps, ArticleFormState> {
                     />
                 </div>
 
-                <div className="article-form-row">
-                    <div className="article-form-field">
-                        <label className="article-form-label" htmlFor="article-form-category">
+                <div className="form-row">
+                    <div className="form-field">
+                        <label className="form-label" htmlFor="article-form-category">
                             Категория
                         </label>
                         <Select
@@ -193,8 +193,8 @@ class ArticleForm extends Component<ArticleFormProps, ArticleFormState> {
                         />
                     </div>
 
-                    <div className="article-form-field">
-                        <label className="article-form-label" htmlFor="article-form-status">
+                    <div className="form-field">
+                        <label className="form-label" htmlFor="article-form-status">
                             Статус
                         </label>
                         <Select
@@ -209,12 +209,12 @@ class ArticleForm extends Component<ArticleFormProps, ArticleFormState> {
                     </div>
                 </div>
 
-                <div className="article-form-field">
-                    <label className="article-form-label" htmlFor="article-form-description">
+                <div className="form-field">
+                    <label className="form-label" htmlFor="article-form-description">
                         Краткое описание
                     </label>
                     <textarea
-                        className="article-form-textarea"
+                        className="form-textarea"
                         id="article-form-description"
                         value={description}
                         rows={2}
@@ -223,8 +223,8 @@ class ArticleForm extends Component<ArticleFormProps, ArticleFormState> {
                     />
                 </div>
 
-                <div className="article-form-field">
-                    <label className="article-form-label" htmlFor="article-form-content">
+                <div className="form-field">
+                    <label className="form-label" htmlFor="article-form-content">
                         Содержимое (Markdown)
                     </label>
                     <div className="article-form-toolbar">
@@ -241,7 +241,7 @@ class ArticleForm extends Component<ArticleFormProps, ArticleFormState> {
                         ))}
                     </div>
                     <textarea
-                        className="article-form-textarea article-form-editor-input"
+                        className="form-textarea article-form-editor-input"
                         id="article-form-content"
                         ref={this.contentRef}
                         value={content}
@@ -250,8 +250,8 @@ class ArticleForm extends Component<ArticleFormProps, ArticleFormState> {
                     />
                 </div>
 
-                <div className="article-form-field">
-                    <span className="article-form-label">Предпросмотр</span>
+                <div className="form-field">
+                    <span className="form-label">Предпросмотр</span>
                     <div className="article-form-preview">
                         {content.trim() ? (
                             <MarkdownContent html={previewHtml} />
@@ -263,16 +263,12 @@ class ArticleForm extends Component<ArticleFormProps, ArticleFormState> {
                     </div>
                 </div>
 
-                {error && <p className="article-form-error">{error}</p>}
+                {error && <p className="form-error">{error}</p>}
 
-                <div className="article-form-actions">
-                    <button
-                        className="article-form-submit"
-                        type="submit"
-                        disabled={submitting}
-                    >
+                <div className="form-actions">
+                    <SubmitButton disabled={submitting}>
                         {submitting ? 'Публикуем…' : 'Создать статью'}
-                    </button>
+                    </SubmitButton>
                 </div>
             </form>
         )

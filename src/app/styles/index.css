@@ -9,6 +9,9 @@
     --accent-bg: rgba(234, 88, 12, 0.1);
     --accent-border: rgba(234, 88, 12, 0.5);
     --on-accent: #fff;
+    --danger: #dc2626;
+    --danger-bg: rgba(220, 38, 38, 0.1);
+    --danger-border: rgba(220, 38, 38, 0.5);
     --brand-gradient: linear-gradient(135deg, #f97316 0%, #dc2626 100%);
     --brand-gradient-horizontal: linear-gradient(90deg, #f97316, #dc2626);
     --cover-gradient: linear-gradient(135deg, #f97316 0%, #ef4444 55%, #dc2626 100%);
@@ -59,6 +62,9 @@
     --accent: #fb923c;
     --accent-bg: rgba(251, 146, 60, 0.15);
     --accent-border: rgba(251, 146, 60, 0.5);
+    --danger: #f87171;
+    --danger-bg: rgba(248, 113, 113, 0.15);
+    --danger-border: rgba(248, 113, 113, 0.5);
     --shadow:
         rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
 }
@@ -74,6 +80,9 @@
         --accent: #fb923c;
         --accent-bg: rgba(251, 146, 60, 0.15);
         --accent-border: rgba(251, 146, 60, 0.5);
+        --danger: #f87171;
+        --danger-bg: rgba(248, 113, 113, 0.15);
+        --danger-border: rgba(248, 113, 113, 0.5);
         --shadow:
             rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
     }

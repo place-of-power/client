@@ -13,7 +13,7 @@ class LinkButton extends Component<LinkButtonProps> {
         const { to, children } = this.props
 
         return (
-            <Link className="link-button" to={to}>
+            <Link className="button button--link" to={to}>
                 {children}
             </Link>
         )

@@ -1,4 +1,4 @@
-export { default as LinkButton } from './LinkButton.tsx'
+export * from './buttons/index.ts'
 export { default as MarkdownContent } from './MarkdownContent.tsx'
 export * from './form/index.ts'
 export * from './hero/index.ts'

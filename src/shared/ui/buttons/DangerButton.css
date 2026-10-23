@@ -1,0 +1,16 @@
+.button--danger {
+    color: var(--danger);
+    background: var(--danger-bg);
+    border: 1px solid var(--danger-border);
+}
+
+.button--danger:hover {
+    color: var(--on-accent);
+    background: var(--danger);
+    border-color: var(--danger);
+}
+
+.button--danger:focus-visible {
+    outline: 2px solid var(--danger);
+    outline-offset: 2px;
+}

@@ -1,5 +1,6 @@
 import { Component } from 'react'
 import type { ReactNode } from 'react'
+import './SubmitButton.css'
 
 interface SubmitButtonProps {
     children: ReactNode

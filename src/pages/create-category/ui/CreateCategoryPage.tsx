@@ -1,7 +1,6 @@
 import { Component } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { CategoryForm } from '@/features/category-form'
-import { addCategory } from '@/shared/api'
 import { paths } from '@/shared/config'
 import type { Category } from '@/shared/model'
 import { HeroTitle } from '@/shared/ui'
@@ -24,14 +23,7 @@ class CreateCategoryView extends Component<CreateCategoryPageProps> {
 function CreateCategoryPage() {
     const navigate = useNavigate()
 
-    return (
-        <CreateCategoryView
-            onCreated={(category) => {
-                addCategory(category)
-                navigate(paths.categories)
-            }}
-        />
-    )
+    return <CreateCategoryView onCreated={() => navigate(paths.categories)} />
 }
 
 export default CreateCategoryPage

@@ -1,6 +1,6 @@
 import { Component } from 'react'
 import type { ChangeEvent, SubmitEvent } from 'react'
-import { slugify } from '@/shared/lib'
+import { createCategoryById, slugify } from '@/shared/lib'
 import type { Category } from '@/shared/model'
 import { SubmitButton } from '@/shared/ui'
 
@@ -14,6 +14,7 @@ interface CategoryFormState {
     sortOrder: string
     error: string
     slugEdited: boolean
+    submitting: boolean
 }
 
 class CategoryForm extends Component<CategoryFormProps, CategoryFormState> {
@@ -23,6 +24,7 @@ class CategoryForm extends Component<CategoryFormProps, CategoryFormState> {
         sortOrder: '',
         error: '',
         slugEdited: false,
+        submitting: false,
     }
 
     handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -42,7 +44,7 @@ class CategoryForm extends Component<CategoryFormProps, CategoryFormState> {
         this.setState({ sortOrder: event.target.value })
     }
 
-    handleSubmit = (event: SubmitEvent<HTMLFormElement>) => {
+    handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
         event.preventDefault()
 
         const { name, slug, sortOrder } = this.state
@@ -53,18 +55,37 @@ class CategoryForm extends Component<CategoryFormProps, CategoryFormState> {
             return
         }
 
-        this.props.onCreated({
-            id: crypto.randomUUID(),
-            name: trimmedName,
-            slug: slug.trim() || slugify(trimmedName),
-            sortOrder: Number.parseInt(sortOrder, 10) || 0,
-        })
+        this.setState({ error: '', submitting: true })
 
-        this.setState({ name: '', slug: '', sortOrder: '', error: '', slugEdited: false })
+        try {
+            const result = await createCategoryById({
+                name: trimmedName,
+                slug: slug.trim() || slugify(trimmedName),
+                sortOrder: Number.parseInt(sortOrder, 10) || 0,
+            })
+
+            if (!result.ok || !result.category) {
+                this.setState({ error: result.error || 'Не удалось создать категорию.' })
+
+                return
+            }
+
+            this.props.onCreated(result.category)
+            this.setState({ name: '', slug: '', sortOrder: '', error: '', slugEdited: false })
+        } catch (error) {
+            this.setState({
+                error:
+                    error instanceof Error
+                        ? error.message
+                        : 'Не удалось создать категорию.',
+            })
+        } finally {
+            this.setState({ submitting: false })
+        }
     }
 
     render() {
-        const { name, slug, sortOrder, error } = this.state
+        const { name, slug, sortOrder, error, submitting } = this.state
 
         return (
             <form className="form" onSubmit={this.handleSubmit}>
@@ -116,7 +137,9 @@ class CategoryForm extends Component<CategoryFormProps, CategoryFormState> {
                 {error && <p className="form-error">{error}</p>}
 
                 <div className="form-actions">
-                    <SubmitButton>Добавить категорию</SubmitButton>
+                    <SubmitButton disabled={submitting}>
+    {submitting ? 'Создаём…' : 'Добавить категорию'}
+</SubmitButton>
                 </div>
             </form>
         )

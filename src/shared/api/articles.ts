@@ -2,18 +2,34 @@ import { slugify } from '@/shared/lib/slug'
 import { mockArticles } from './mock/data.ts'
 import type { Article, ArticleInput, ArticlePreview } from './types.ts'
 
+const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8080'
+
 const WORDS_PER_MINUTE = 180
 
-function toPreview(article: Article): ArticlePreview {
+interface ApiEnvelope<T> {
+    data: T
+    errors: { field: string | null; message: string }[]
+}
+
+interface RecentArticleDto {
+    slug: string
+    title: string
+    description: string
+    status: ArticlePreview['status']
+    categorySlug: string
+    categoryName: string
+    publishedAt: string | null
+}
+
+function toPreviewFromRecent(dto: RecentArticleDto): ArticlePreview {
     return {
-        slug: article.slug,
-        title: article.title,
-        description: article.description,
-        category: article.category,
-        status: article.status,
-        publishedAt: article.publishedAt,
-        readingTime: article.readingTime,
-        cover: article.cover,
+        slug: dto.slug,
+        title: dto.title,
+        description: dto.description,
+        category: { id: '', name: dto.categoryName, slug: dto.categorySlug },
+        status: dto.status,
+        publishedAt: dto.publishedAt ?? '',
+        readingTime: `${Math.max(1, Math.round(dto.description.split(/\s+/).filter(Boolean).length / WORDS_PER_MINUTE))} мин чтения`,
     }
 }
 
@@ -38,7 +54,15 @@ function uniqueSlug(title: string): string {
 }
 
 export async function fetchArticles(): Promise<ArticlePreview[]> {
-    return mockArticles.map(toPreview)
+    const response = await fetch(`${API_URL}/api/v1/articles/recent?limit=6`)
+
+    if (!response.ok) {
+        throw new Error(`Не удалось загрузить статьи: ${response.status}`)
+    }
+
+    const { data } = (await response.json()) as ApiEnvelope<RecentArticleDto[]>
+
+    return data.map(toPreviewFromRecent)
 }
 
 export async function fetchArticle(slug: string): Promise<Article | null> {

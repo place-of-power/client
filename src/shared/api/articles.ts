@@ -1,5 +1,4 @@
 import { slugify } from '@/shared/lib/slug'
-import { mockArticles } from './mock/data.ts'
 import type { Article, ArticleInput, ArticlePreview } from './types.ts'
 
 const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8080'
@@ -30,6 +29,7 @@ interface CreatedArticleDto {
     status: ArticlePreview['status']
     categoryId: string
     categorySlug: string
+    categoryName: string
 }
 
 function toPreviewFromRecent(dto: RecentArticleDto): ArticlePreview {
@@ -89,7 +89,28 @@ export async function fetchArticlesByCategory(
 }
 
 export async function fetchArticle(slug: string): Promise<Article | null> {
-    return mockArticles.find((article) => article.slug === slug) ?? null
+    const response = await fetch(`${API_URL}/api/v1/articles/${slug}`)
+
+    if (response.status === 404) {
+        return null
+    }
+
+    if (!response.ok) {
+        throw new Error(`Не удалось загрузить статью: ${response.status}`)
+    }
+
+    const { data: dto } = (await response.json()) as ApiEnvelope<CreatedArticleDto>
+
+    return {
+        slug: dto.slug,
+        title: dto.title,
+        description: dto.description,
+        category: { id: dto.categoryId, name: dto.categoryName, slug: dto.categorySlug },
+        status: dto.status,
+        publishedAt: '',
+        readingTime: '',
+        content: dto.body,
+    }
 }
 
 export async function createArticle(input: ArticleInput): Promise<Article> {

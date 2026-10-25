@@ -39,7 +39,7 @@ class CategoriesPage extends Component<CategoriesPageProps, CategoriesPageState>
         return (
             <main className="page categories-page">
                 <HeroTitle>Категории</HeroTitle>
-                <LinkButton to={paths.createCategory}>Добавить категорию</LinkButton>
+                <LinkButton to={paths.manageCategories}>Управление категориями</LinkButton>
                 {!loading && <CategoryTiles categories={categories} heading={false} />}
             </main>
         )

@@ -1,0 +1,1 @@
+export { default as ManageCategoriesPage } from './ui/ManageCategoriesPage.tsx'

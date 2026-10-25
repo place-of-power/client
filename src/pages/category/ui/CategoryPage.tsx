@@ -1,11 +1,12 @@
 import { Component } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { fetchArticles, fetchCategories } from '@/shared/api'
+import { fetchArticlesByCategory, fetchCategories } from '@/shared/api'
 import type { ArticlePreview } from '@/shared/api'
 import { paths } from '@/shared/config'
 import type { Category } from '@/shared/model/category'
 import { HeroTitle } from '@/shared/ui'
 import { ArticleGrid } from '@/widgets/article-grid'
+import './CategoryPage.css'
 
 interface CategoryPageViewProps {
     slug: string
@@ -14,14 +15,22 @@ interface CategoryPageViewProps {
 interface CategoryPageViewState {
     category: Category | null
     articles: ArticlePreview[]
+    nextCursor: string | null
     loading: boolean
+    loadingMore: boolean
+    error: string
 }
+
+const PAGE_LIMIT = 10
 
 class CategoryPageView extends Component<CategoryPageViewProps, CategoryPageViewState> {
     state: CategoryPageViewState = {
         category: null,
         articles: [],
+        nextCursor: null,
         loading: true,
+        loadingMore: false,
+        error: '',
     }
 
     componentDidMount() {
@@ -35,24 +44,50 @@ class CategoryPageView extends Component<CategoryPageViewProps, CategoryPageView
     }
 
     async load() {
+        this.setState({ loading: true, error: '' })
+
         try {
-            const [categories, articles] = await Promise.all([fetchCategories(), fetchArticles()])
+            const [categories, page] = await Promise.all([
+                fetchCategories(),
+                fetchArticlesByCategory(this.props.slug, undefined, PAGE_LIMIT),
+            ])
             const category = categories.find((item) => item.slug === this.props.slug) ?? null
 
             this.setState({
                 category,
-                articles: category
-                    ? articles.filter((article) => article.category.id === category.id)
-                    : [],
+                articles: category ? page.items : [],
+                nextCursor: category ? page.nextCursor : null,
                 loading: false,
             })
         } catch {
-            this.setState({ loading: false })
+            this.setState({ loading: false, error: 'Не удалось загрузить статьи категории.' })
+        }
+    }
+
+    loadMore = async () => {
+        const { nextCursor } = this.state
+
+        if (!nextCursor) {
+            return
+        }
+
+        this.setState({ loadingMore: true })
+
+        try {
+            const page = await fetchArticlesByCategory(this.props.slug, nextCursor, PAGE_LIMIT)
+
+            this.setState((state) => ({
+                articles: [...state.articles, ...page.items],
+                nextCursor: page.nextCursor,
+                loadingMore: false,
+            }))
+        } catch {
+            this.setState({ loadingMore: false, error: 'Не удалось загрузить ещё статьи.' })
         }
     }
 
     render() {
-        const { category, articles, loading } = this.state
+        const { category, articles, nextCursor, loading, loadingMore, error } = this.state
 
         if (loading) {
             return <p className="page-status">Загрузка…</p>
@@ -70,7 +105,18 @@ class CategoryPageView extends Component<CategoryPageViewProps, CategoryPageView
         return (
             <main className="page">
                 <HeroTitle>{category.name}</HeroTitle>
+                {error && <p className="page-status">{error}</p>}
                 <ArticleGrid articles={articles} />
+                {nextCursor && (
+                    <button
+                        className="category-page-more"
+                        type="button"
+                        onClick={this.loadMore}
+                        disabled={loadingMore}
+                    >
+                        {loadingMore ? 'Загружаем…' : 'Загрузить ещё'}
+                    </button>
+                )}
             </main>
         )
     }

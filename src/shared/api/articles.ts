@@ -65,6 +65,38 @@ export async function fetchArticles(): Promise<ArticlePreview[]> {
     return data.map(toPreviewFromRecent)
 }
 
+export interface CategoryArticlesPage {
+    items: ArticlePreview[]
+    nextCursor: string | null
+}
+
+export async function fetchArticlesByCategory(
+    slug: string,
+    cursor?: string,
+    limit = 10,
+): Promise<CategoryArticlesPage> {
+    const query = new URLSearchParams({ limit: String(limit) })
+    if (cursor) {
+        query.set('cursor', cursor)
+    }
+
+    const response = await fetch(`${API_URL}/api/v1/categories/${slug}/articles?${query}`)
+
+    if (!response.ok) {
+        throw new Error(`Не удалось загрузить статьи категории: ${response.status}`)
+    }
+
+    const body = (await response.json()) as ApiEnvelope<{
+        items: RecentArticleDto[]
+        nextCursor: string | null
+    }>
+
+    return {
+        items: body.data.items.map(toPreviewFromRecent),
+        nextCursor: body.data.nextCursor,
+    }
+}
+
 export async function fetchArticle(slug: string): Promise<Article | null> {
     return mockArticles.find((article) => article.slug === slug) ?? null
 }

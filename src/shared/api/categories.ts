@@ -58,3 +58,15 @@ export async function createCategory(input: CategoryInput): Promise<Category> {
 
     return body.data
 }
+
+export async function deleteCategory(id: string): Promise<void> {
+    const response = await fetch(`${API_URL}/api/v1/categories/${id}`, {
+        method: 'DELETE',
+    })
+
+    if (!response.ok) {
+        const body = (await response.json()) as ApiEnvelope<Category>
+
+        throw new Error(body.errors[0]?.message ?? `Не удалось удалить категорию: ${response.status}`)
+    }
+}

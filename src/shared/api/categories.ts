@@ -70,3 +70,22 @@ export async function deleteCategory(id: string): Promise<void> {
         throw new Error(body.errors[0]?.message ?? `Не удалось удалить категорию: ${response.status}`)
     }
 }
+
+export interface CategoryOrderItem {
+    id: string
+    sortOrder: number
+}
+
+export async function reorderCategories(items: CategoryOrderItem[]): Promise<void> {
+    const response = await fetch(`${API_URL}/api/v1/categories/reorder`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items }),
+    })
+
+    if (!response.ok) {
+        const body = (await response.json()) as ApiEnvelope<Category>
+
+        throw new Error(body.errors[0]?.message ?? `Не удалось изменить порядок: ${response.status}`)
+    }
+}

@@ -151,9 +151,19 @@ class ArticleForm extends Component<ArticleFormProps, ArticleFormState> {
 
         this.setState({ error: '', submitting: true })
 
-        const article = await createArticle(input)
+        try {
+            const article = await createArticle(input)
 
-        this.props.onCreated(article.slug)
+            this.props.onCreated(article.slug)
+        } catch (error) {
+            this.setState({
+                submitting: false,
+                error:
+                    error instanceof Error
+                        ? error.message
+                        : 'Не удалось создать статью.',
+            })
+        }
     }
 
     render() {

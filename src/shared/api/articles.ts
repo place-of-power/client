@@ -21,6 +21,17 @@ interface RecentArticleDto {
     publishedAt: string | null
 }
 
+interface CreatedArticleDto {
+    id: string
+    slug: string
+    title: string
+    description: string
+    body: string
+    status: ArticlePreview['status']
+    categoryId: string
+    categorySlug: string
+}
+
 function toPreviewFromRecent(dto: RecentArticleDto): ArticlePreview {
     return {
         slug: dto.slug,
@@ -31,26 +42,6 @@ function toPreviewFromRecent(dto: RecentArticleDto): ArticlePreview {
         publishedAt: dto.publishedAt ?? '',
         readingTime: `${Math.max(1, Math.round(dto.description.split(/\s+/).filter(Boolean).length / WORDS_PER_MINUTE))} мин чтения`,
     }
-}
-
-function estimateReadingTime(content: string): string {
-    const words = content.trim().split(/\s+/).filter(Boolean).length
-    const minutes = Math.max(1, Math.round(words / WORDS_PER_MINUTE))
-
-    return `${minutes} мин чтения`
-}
-
-function uniqueSlug(title: string): string {
-    const base = slugify(title)
-    let slug = base
-    let index = 2
-
-    while (mockArticles.some((article) => article.slug === slug)) {
-        slug = `${base}-${index}`
-        index += 1
-    }
-
-    return slug
 }
 
 export async function fetchArticles(): Promise<ArticlePreview[]> {
@@ -102,18 +93,36 @@ export async function fetchArticle(slug: string): Promise<Article | null> {
 }
 
 export async function createArticle(input: ArticleInput): Promise<Article> {
-    const article: Article = {
-        slug: uniqueSlug(input.title),
-        title: input.title,
-        description: input.description,
-        category: input.category,
-        status: input.status,
-        publishedAt: new Date().toISOString().slice(0, 10),
-        readingTime: estimateReadingTime(input.content),
-        content: input.content,
+    const slug = slugify(input.title)
+    const response = await fetch(`${API_URL}/api/v1/articles`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            slug,
+            title: input.title,
+            description: input.description,
+            body: input.content,
+            status: input.status,
+            categoryId: input.category.id,
+        }),
+    })
+
+    if (!response.ok) {
+        const body = (await response.json()) as ApiEnvelope<Article>
+        throw new Error(body.errors[0]?.message ?? `Не удалось создать статью: ${response.status}`)
     }
 
-    mockArticles.unshift(article)
+    const body = (await response.json()) as ApiEnvelope<CreatedArticleDto>
+    const dto = body.data
 
-    return article
+    return {
+        slug: dto.slug,
+        title: dto.title,
+        description: dto.description,
+        category: { id: dto.categoryId, name: '', slug: dto.categorySlug },
+        status: dto.status,
+        publishedAt: '',
+        readingTime: '',
+        content: dto.body,
+    }
 }

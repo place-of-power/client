@@ -48,3 +48,4 @@ export function parseMarkdown(markdown: string): { html: string; headings: TocHe
 
     return { html, headings }
 }
+export * from './blocks.ts'

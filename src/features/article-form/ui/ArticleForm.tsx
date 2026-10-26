@@ -1,10 +1,11 @@
-import { Component, createRef } from 'react'
+import { Component } from 'react'
 import type { ChangeEvent, SubmitEvent } from 'react'
 import { createArticle, fetchCategories } from '@/shared/api'
 import type { ArticleInput } from '@/shared/api'
 import { parseMarkdown } from '@/shared/lib/markdown'
 import type { ArticleStatus, Category } from '@/shared/model'
 import { MarkdownContent } from '@/shared/ui'
+import { BlockEditor } from '@/features/block-editor'
 import {
     Button,
     Input,
@@ -16,38 +17,6 @@ import {
     SelectValue,
     Textarea,
 } from '@/shared/ui/kit'
-
-interface MarkdownTool {
-    label: string
-    title: string
-    before: string
-    after: string
-    placeholder: string
-}
-
-const MARKDOWN_TOOLS: MarkdownTool[] = [
-    { label: 'H2', title: 'Заголовок 2', before: '## ', after: '', placeholder: 'Заголовок' },
-    { label: 'H3', title: 'Заголовок 3', before: '### ', after: '', placeholder: 'Заголовок' },
-    { label: 'Жирный', title: 'Жирный текст', before: '**', after: '**', placeholder: 'текст' },
-    { label: 'Курсив', title: 'Курсив', before: '*', after: '*', placeholder: 'текст' },
-    { label: 'Код', title: 'Код в строке', before: '`', after: '`', placeholder: 'код' },
-    {
-        label: 'Блок',
-        title: 'Блок кода',
-        before: '```\n',
-        after: '\n```',
-        placeholder: 'код',
-    },
-    { label: 'Список', title: 'Список', before: '- ', after: '', placeholder: 'пункт' },
-    { label: 'Цитата', title: 'Цитата', before: '> ', after: '', placeholder: 'цитата' },
-    {
-        label: 'Ссылка',
-        title: 'Ссылка',
-        before: '[',
-        after: '](url)',
-        placeholder: 'текст',
-    },
-]
 
 interface ArticleFormProps {
     onCreated: (slug: string) => void
@@ -65,7 +34,6 @@ interface ArticleFormState {
 }
 
 class ArticleForm extends Component<ArticleFormProps, ArticleFormState> {
-    contentRef = createRef<HTMLTextAreaElement>()
 
     state: ArticleFormState = {
         title: '',
@@ -108,31 +76,8 @@ class ArticleForm extends Component<ArticleFormProps, ArticleFormState> {
         this.setState({ description: event.target.value })
     }
 
-    handleContentChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-        this.setState({ content: event.target.value })
-    }
-
-    insertTool = (tool: MarkdownTool) => {
-        const textarea = this.contentRef.current
-
-        if (!textarea) {
-            return
-        }
-
-        const { content } = this.state
-        const start = textarea.selectionStart
-        const end = textarea.selectionEnd
-        const selected = content.slice(start, end)
-        const inner = selected || tool.placeholder
-        const next = content.slice(0, start) + tool.before + inner + tool.after + content.slice(end)
-
-        this.setState({ content: next }, () => {
-            textarea.focus()
-            textarea.setSelectionRange(
-                start + tool.before.length,
-                start + tool.before.length + inner.length,
-            )
-        })
+    handleBlocksChange = (markdown: string) => {
+        this.setState({ content: markdown })
     }
 
     handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
@@ -244,33 +189,11 @@ class ArticleForm extends Component<ArticleFormProps, ArticleFormState> {
                         </div>
 
                         <div className="rounded-2xl border bg-card p-6">
-                            <div className="flex flex-wrap items-center justify-between gap-2">
-                                <Label htmlFor="article-form-content">Содержимое (Markdown)</Label>
-                                <div className="flex flex-wrap gap-1">
-                                    {MARKDOWN_TOOLS.map((tool) => (
-                                        <Button
-                                            key={tool.label}
-                                            type="button"
-                                            variant="outline"
-                                            size="sm"
-                                            title={tool.title}
-                                            className="h-7 rounded-full px-2.5 text-xs"
-                                            onClick={() => this.insertTool(tool)}
-                                        >
-                                            {tool.label}
-                                        </Button>
-                                    ))}
-                                </div>
-                            </div>
-                            <Textarea
-                                id="article-form-content"
-                                innerRef={this.contentRef}
-                                value={content}
-                                rows={18}
-                                placeholder={'## Заголовок раздела\n\nТекст статьи…'}
-                                onChange={this.handleContentChange}
-                                className="mt-3 font-mono text-sm leading-relaxed"
-                            />
+                            <Label>Содержимое</Label>
+                            <p className="mt-1 mb-3 text-xs text-muted-foreground">
+                                Блоки склеиваются в&nbsp;markdown-тело статьи.
+                            </p>
+                            <BlockEditor value={content} onChange={this.handleBlocksChange} />
                         </div>
 
                         {error ? (

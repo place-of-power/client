@@ -189,7 +189,7 @@ class Hero extends Component<HeroProps> {
                                     variant="outline"
                                     className="h-11 rounded-full px-6"
                                 >
-                                    <Link to={paths.create}>Написать статью</Link>
+                                    <a href="#editors">Онлайн-редакторы ЯП</a>
                                 </Button>
                             </div>
                         </div>

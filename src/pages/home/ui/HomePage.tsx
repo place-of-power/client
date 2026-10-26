@@ -3,6 +3,7 @@ import { fetchArticles } from '@/shared/api'
 import type { ArticlePreview } from '@/shared/api'
 import { ArticleGrid } from '@/widgets/article-grid'
 import { CategoriesShowcase } from '@/widgets/categories-showcase'
+import { EditorsSection } from '@/widgets/editors-section'
 import { FeaturedPosts } from '@/widgets/featured-posts'
 import { Hero } from '@/widgets/hero'
 
@@ -45,6 +46,8 @@ class HomePage extends Component<HomePageProps, HomePageState> {
                 <CategoriesShowcase />
 
                 <FeaturedPosts articles={articles} />
+
+                <EditorsSection />
 
                 <main className="page">
                     {!loading && error && <p className="page-status">{error}</p>}

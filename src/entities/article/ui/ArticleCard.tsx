@@ -1,6 +1,6 @@
 import { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowUpRight, Clock } from 'lucide-react'
+import { ArrowRight, Clock } from 'lucide-react'
 import type { ArticlePreview } from '@/shared/api'
 import { blogCategories } from '@/shared/api/mock/blog-categories'
 import { paths } from '@/shared/config'
@@ -73,11 +73,11 @@ class ArticleCard extends Component<ArticleCardProps> {
                         <Button
                             asChild
                             size="sm"
-                            variant="outline"
+                            variant="ghost"
                             className="h-8 rounded-full px-3.5 text-[0.8rem]"
                         >
                             <Link to={paths.article(article.slug)}>
-                                Читать <ArrowUpRight className="size-3.5" />
+                                Читать <ArrowRight className="size-3.5" />
                             </Link>
                         </Button>
                     </div>

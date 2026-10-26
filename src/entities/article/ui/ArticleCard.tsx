@@ -77,7 +77,8 @@ class ArticleCard extends Component<ArticleCardProps> {
                             className="h-8 rounded-full px-3.5 text-[0.8rem]"
                         >
                             <Link to={paths.article(article.slug)}>
-                                Читать <ArrowRight className="size-3.5" />
+                                Читать{' '}
+                                <ArrowRight className="mt-0.5 size-3.5 text-foreground" />
                             </Link>
                         </Button>
                     </div>

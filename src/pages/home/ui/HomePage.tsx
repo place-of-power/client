@@ -5,7 +5,6 @@ import { CategoriesShowcase } from '@/widgets/categories-showcase'
 import { EditorsSection } from '@/widgets/editors-section'
 import { FeaturedPosts } from '@/widgets/featured-posts'
 import { Hero } from '@/widgets/hero'
-import { Newsletter } from '@/widgets/newsletter'
 import { PostsGrid } from '@/widgets/posts-grid'
 
 type HomePageProps = Record<string, never>
@@ -57,8 +56,6 @@ class HomePage extends Component<HomePageProps, HomePageState> {
                 )}
 
                 {!loading && !error && <PostsGrid articles={articles} />}
-
-                <Newsletter />
             </>
         )
     }

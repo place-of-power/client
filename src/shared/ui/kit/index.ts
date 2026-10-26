@@ -37,3 +37,13 @@ export {
 } from './NavigationMenu.tsx'
 export { navigationMenuTriggerStyle } from './navigationMenuTriggerStyle.ts'
 export { default as Tabs, TabsList, TabsTrigger, TabsContent } from './Tabs.tsx'
+export {
+    default as Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectSeparator,
+    SelectTrigger,
+    SelectValue,
+} from './Select.tsx'

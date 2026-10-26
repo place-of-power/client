@@ -4,8 +4,18 @@ import { createArticle, fetchCategories } from '@/shared/api'
 import type { ArticleInput } from '@/shared/api'
 import { parseMarkdown } from '@/shared/lib/markdown'
 import type { ArticleStatus, Category } from '@/shared/model'
-import { MarkdownContent, Select } from '@/shared/ui'
-import { Button, Input, Label, Textarea } from '@/shared/ui/kit'
+import { MarkdownContent } from '@/shared/ui'
+import {
+    Button,
+    Input,
+    Label,
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+    Textarea,
+} from '@/shared/ui/kit'
 
 interface MarkdownTool {
     label: string
@@ -191,27 +201,33 @@ class ArticleForm extends Component<ArticleFormProps, ArticleFormState> {
                                 <div className="space-y-2">
                                     <Label htmlFor="article-form-category">Категория</Label>
                                     <Select
-                                        id="article-form-category"
-                                        value={categoryId}
-                                        options={categories.map((item) => ({
-                                            value: item.id,
-                                            label: item.name,
-                                        }))}
-                                        onChange={this.handleCategoryChange}
-                                    />
+                                        value={categoryId || undefined}
+                                        onValueChange={this.handleCategoryChange}
+                                    >
+                                        <SelectTrigger id="article-form-category" className="w-full">
+                                            <SelectValue placeholder="Выберите категорию" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {categories.map((item) => (
+                                                <SelectItem key={item.id} value={item.id}>
+                                                    {item.name}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
                                 </div>
 
                                 <div className="space-y-2">
                                     <Label htmlFor="article-form-status">Статус</Label>
-                                    <Select
-                                        id="article-form-status"
-                                        value={status}
-                                        options={[
-                                            { value: 'published', label: 'Опубликовано' },
-                                            { value: 'draft', label: 'Черновик' },
-                                        ]}
-                                        onChange={this.handleStatusChange}
-                                    />
+                                    <Select value={status} onValueChange={this.handleStatusChange}>
+                                        <SelectTrigger id="article-form-status" className="w-full">
+                                            <SelectValue placeholder="Статус" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="published">Опубликовано</SelectItem>
+                                            <SelectItem value="draft">Черновик</SelectItem>
+                                        </SelectContent>
+                                    </Select>
                                 </div>
                             </div>
 

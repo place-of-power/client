@@ -1,5 +1,4 @@
 export * from './buttons/index.ts'
-export * from './kit/index.ts'
 export * from './post-cover/index.ts'
 export { default as MarkdownContent } from './MarkdownContent.tsx'
 export * from './dialogs/index.ts'

@@ -16,6 +16,7 @@ class PostCover extends Component<PostCoverProps> {
         const category = blogCategories.find((item) => item.slug === article.category.slug)
         const Icon = category?.icon
         const gradient = category?.gradient ?? 'from-emerald-500 via-teal-500 to-cyan-500'
+        const subcategory = category?.subcategories[0]
 
         return (
             <div
@@ -36,14 +37,13 @@ class PostCover extends Component<PostCoverProps> {
                                 {article.category.name}
                             </span>
                         ) : null}
-                        <span className="rounded-full bg-white/15 px-2 py-0.5 text-[0.65rem] font-medium backdrop-blur-sm">
-                            {article.readingTime}
-                        </span>
+                        {subcategory ? (
+                            <span className="rounded-full bg-white/15 px-2.5 py-1 text-[0.65rem] font-medium backdrop-blur-sm">
+                                {subcategory.name}
+                            </span>
+                        ) : null}
                     </div>
-                    <div className="flex items-end justify-between">
-                        <span className="font-mono text-[0.6rem] tracking-[0.2em] text-white/70 uppercase">
-                            {article.category.slug}
-                        </span>
+                    <div className="flex items-end justify-end">
                         <span className="grid size-8 place-items-center rounded-full bg-white/15 backdrop-blur-sm transition-transform group-hover:translate-x-0.5">
                             <ArrowUpRight className="size-4" />
                         </span>

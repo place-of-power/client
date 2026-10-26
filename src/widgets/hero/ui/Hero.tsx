@@ -1,17 +1,11 @@
 import { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowRight, Clock, Cpu, Search, Terminal, TrendingUp } from 'lucide-react'
+import { ArrowRight, Cpu, Search, Terminal, TrendingUp } from 'lucide-react'
+import { ArticleCard } from '@/entities/article'
 import type { ArticlePreview } from '@/shared/api'
 import { blogCategories, blogSubcategoryCount } from '@/shared/api/mock/blog-categories'
 import { editorGroups, paths } from '@/shared/config'
 import { Button } from '@/shared/ui/kit'
-import { PostCover } from '@/shared/ui/post-cover'
-
-function formatDate(iso: string): string {
-    if (!iso) return ''
-
-    return new Date(iso).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' })
-}
 
 const heroPills = [
     { icon: Cpu, label: 'LLM' },
@@ -20,63 +14,6 @@ const heroPills = [
 ]
 
 const editorsCount = editorGroups.reduce((total, group) => total + group.editors.length, 0)
-
-class FeaturedCard extends Component<{ article: ArticlePreview }> {
-    render() {
-        const { article } = this.props
-
-        return (
-            <div className="rounded-3xl border bg-card p-3 shadow-xl">
-                <Link
-                    to={paths.article(article.slug)}
-                    aria-label={article.title}
-                    className="group relative block"
-                >
-                    <PostCover article={article} className="rounded-2xl" />
-                </Link>
-                <div className="p-4">
-                    <div className="flex items-center gap-2 text-[0.7rem] font-medium tracking-wider text-muted-foreground uppercase">
-                        <span className="size-2 rounded-full bg-emerald-500" />
-                        В центре внимания
-                    </div>
-                    <h3 className="mt-2 text-lg leading-snug font-semibold tracking-tight">
-                        {article.title}
-                    </h3>
-                    <p className="mt-1.5 line-clamp-2 text-sm text-muted-foreground">
-                        {article.description}
-                    </p>
-                    <div className="mt-3 flex flex-wrap items-center gap-2 text-[0.7rem] text-muted-foreground">
-                        <span className="inline-flex items-center gap-1">
-                            <Clock className="size-3" /> {article.readingTime}
-                        </span>
-                        <span className="size-1 rounded-full bg-muted-foreground/50" />
-                        <span>{formatDate(article.publishedAt)}</span>
-                    </div>
-                    <div className="mt-4 flex items-center justify-between">
-                        <div className="flex items-center gap-2.5">
-                            <div className="grid size-8 place-items-center rounded-full bg-gradient-to-br from-emerald-500 to-cyan-500 text-[0.66rem] font-bold text-white">
-                                {article.category.name.slice(0, 1).toUpperCase()}
-                            </div>
-                            <div>
-                                <p className="text-[0.8rem] leading-tight font-medium">
-                                    {article.category.name}
-                                </p>
-                                <p className="text-[0.66rem] text-muted-foreground">
-                                    {article.status === 'published' ? 'Опубликовано' : article.status}
-                                </p>
-                            </div>
-                        </div>
-                        <Button asChild size="sm" variant="ghost" className="h-8 rounded-full">
-                            <Link to={paths.article(article.slug)}>
-                                Читать <ArrowRight className="size-4" />
-                            </Link>
-                        </Button>
-                    </div>
-                </div>
-            </div>
-        )
-    }
-}
 
 interface HeroProps {
     article?: ArticlePreview
@@ -196,7 +133,7 @@ class Hero extends Component<HeroProps> {
                         {article ? (
                             <div className="relative mx-auto w-full max-w-md self-start lg:max-w-none">
                                 <div className="absolute -inset-3 -z-10 rounded-[2rem] bg-gradient-to-tr from-emerald-500/20 via-transparent to-cyan-500/20 blur-2xl" />
-                                <FeaturedCard article={article} />
+                                <ArticleCard article={article} />
                             </div>
                         ) : null}
                     </div>

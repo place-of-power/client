@@ -250,11 +250,11 @@ class Article extends Component<ArticleProps, ArticleState> {
 
                     <div className="mt-8">{this.renderCover()}</div>
 
-                    <div className="mt-10 grid grid-cols-1 gap-10 xl:grid-cols-[minmax(0,1fr)_18rem]">
-                        <div>
+                    <div className="mt-10 grid grid-cols-1 gap-10 xl:grid-cols-[minmax(0,1fr)_15.6rem]">
+                        <div className="mx-auto w-full max-w-3xl space-y-6">
                             <MarkdownContent html={this.markdown.html} innerRef={this.bodyRef} />
 
-                            <footer className="mt-12 flex items-center gap-3 rounded-2xl border bg-card p-5">
+                            <footer className="flex items-center gap-3 rounded-2xl border bg-card p-5">
                                 <span className="grid size-11 place-items-center rounded-full bg-gradient-to-br from-emerald-500 to-cyan-500 text-sm font-bold text-white">
                                     {this.initials(author)}
                                 </span>

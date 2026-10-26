@@ -195,7 +195,7 @@ class Hero extends Component<HeroProps> {
                         </div>
 
                         {article ? (
-                            <div className="relative mx-auto w-full max-w-md lg:max-w-none">
+                            <div className="relative mx-auto w-full max-w-md self-start lg:max-w-none">
                                 <div className="absolute -inset-3 -z-10 rounded-[2rem] bg-gradient-to-tr from-emerald-500/20 via-transparent to-cyan-500/20 blur-2xl" />
                                 <FeaturedCard article={article} />
                             </div>

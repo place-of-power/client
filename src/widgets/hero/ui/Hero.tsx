@@ -1,10 +1,17 @@
 import { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowRight, Cpu, Search, Sparkles, Terminal, TrendingUp } from 'lucide-react'
+import { ArrowRight, Clock, Cpu, Search, Sparkles, Terminal, TrendingUp } from 'lucide-react'
 import type { ArticlePreview } from '@/shared/api'
 import { blogCategories, blogSubcategoryCount } from '@/shared/api/mock/blog-categories'
 import { editorGroups, paths } from '@/shared/config'
 import { Badge, Button } from '@/shared/ui/kit'
+import { PostCover } from '@/shared/ui/post-cover'
+
+function formatDate(iso: string): string {
+    if (!iso) return ''
+
+    return new Date(iso).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' })
+}
 
 const heroPills = [
     { icon: Cpu, label: 'LLM' },
@@ -23,14 +30,9 @@ class FeaturedCard extends Component<{ article: ArticlePreview }> {
                 <Link
                     to={paths.article(article.slug)}
                     aria-label={article.title}
-                    className="relative block overflow-hidden rounded-2xl"
+                    className="group relative block"
                 >
-                    <div className="relative flex aspect-[16/9] items-end bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-500 p-4">
-                        <div className="bg-grid pointer-events-none absolute inset-0 opacity-25" />
-                        <span className="relative rounded-full bg-white/20 px-2.5 py-1 text-[0.7rem] font-semibold text-white ring-1 ring-white/30 backdrop-blur">
-                            {article.category.name}
-                        </span>
-                    </div>
+                    <PostCover article={article} className="rounded-2xl" />
                 </Link>
                 <div className="p-4">
                     <div className="flex items-center gap-2 text-[0.7rem] font-medium tracking-wider text-muted-foreground uppercase">
@@ -43,6 +45,13 @@ class FeaturedCard extends Component<{ article: ArticlePreview }> {
                     <p className="mt-1.5 line-clamp-2 text-sm text-muted-foreground">
                         {article.description}
                     </p>
+                    <div className="mt-3 flex flex-wrap items-center gap-2 text-[0.7rem] text-muted-foreground">
+                        <span className="inline-flex items-center gap-1">
+                            <Clock className="size-3" /> {article.readingTime}
+                        </span>
+                        <span className="size-1 rounded-full bg-muted-foreground/50" />
+                        <span>{formatDate(article.publishedAt)}</span>
+                    </div>
                     <div className="mt-4 flex items-center justify-between">
                         <div className="flex items-center gap-2.5">
                             <div className="grid size-8 place-items-center rounded-full bg-gradient-to-br from-emerald-500 to-cyan-500 text-[0.66rem] font-bold text-white">
@@ -53,7 +62,7 @@ class FeaturedCard extends Component<{ article: ArticlePreview }> {
                                     {article.category.name}
                                 </p>
                                 <p className="text-[0.66rem] text-muted-foreground">
-                                    {article.readingTime}
+                                    {article.status === 'published' ? 'Опубликовано' : article.status}
                                 </p>
                             </div>
                         </div>

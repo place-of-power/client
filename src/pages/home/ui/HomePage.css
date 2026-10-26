@@ -1,11 +1,3 @@
-.home-hero {
-    margin-bottom: 40px;
-}
-
-.home-hero .search-bar {
-    margin-top: 24px;
-}
-
 .home-sections {
     display: grid;
     gap: 48px;

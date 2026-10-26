@@ -1,10 +1,10 @@
 import { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowRight, Clock, Cpu, Search, Sparkles, Terminal, TrendingUp } from 'lucide-react'
+import { ArrowRight, Clock, Cpu, Search, Terminal, TrendingUp } from 'lucide-react'
 import type { ArticlePreview } from '@/shared/api'
 import { blogCategories, blogSubcategoryCount } from '@/shared/api/mock/blog-categories'
 import { editorGroups, paths } from '@/shared/config'
-import { Badge, Button } from '@/shared/ui/kit'
+import { Button } from '@/shared/ui/kit'
 import { PostCover } from '@/shared/ui/post-cover'
 
 function formatDate(iso: string): string {
@@ -110,16 +110,7 @@ class Hero extends Component<HeroProps> {
                 <div className="mx-auto w-full max-w-[var(--container)] px-[var(--gutter)] pt-14 pb-16 lg:pt-20 lg:pb-24">
                     <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-12">
                         <div className="text-center lg:text-left">
-                            <div className="flex flex-wrap items-center justify-center gap-2 lg:justify-start">
-                                <Badge className="border-emerald-500/30 bg-emerald-500/10 text-emerald-500">
-                                    <Sparkles className="size-3" /> Новый выпуск
-                                </Badge>
-                                <span className="text-xs text-muted-foreground">
-                                    еженедельный дайджест по IT и ИИ
-                                </span>
-                            </div>
-
-                            <h1 className="mt-5 text-4xl leading-[1.05] font-extrabold tracking-tight text-balance sm:text-5xl lg:text-6xl">
+                            <h1 className="mt-2 text-4xl leading-[1.05] font-extrabold tracking-tight text-balance sm:text-5xl lg:text-6xl">
                                 Блог про{' '}
                                 <span className="relative whitespace-nowrap">
                                     <span className="bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 bg-clip-text text-transparent">

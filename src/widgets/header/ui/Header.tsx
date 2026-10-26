@@ -99,7 +99,7 @@ class Header extends Component<Record<string, never>, HeaderState> {
                             asChild
                             variant="outline"
                             size="sm"
-                            className="hidden h-9 rounded-full px-3.5 sm:inline-flex"
+                            className="hidden h-9 rounded-full px-3.5 text-[0.8rem] text-foreground sm:inline-flex"
                         >
                             <Link to={paths.create}>
                                 <PenLine className="size-4" /> Написать

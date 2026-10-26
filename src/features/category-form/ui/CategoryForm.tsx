@@ -2,7 +2,7 @@ import { Component } from 'react'
 import type { ChangeEvent, SubmitEvent } from 'react'
 import { createCategoryById, slugify } from '@/shared/lib'
 import type { Category } from '@/shared/model'
-import { SubmitButton } from '@/shared/ui'
+import { Button, Input, Label } from '@/shared/ui/kit'
 
 interface CategoryFormProps {
     onCreated: (category: Category) => void
@@ -88,58 +88,59 @@ class CategoryForm extends Component<CategoryFormProps, CategoryFormState> {
         const { name, slug, sortOrder, error, submitting } = this.state
 
         return (
-            <form className="form" onSubmit={this.handleSubmit}>
-                <div className="form-field">
-                    <label className="form-label" htmlFor="category-form-name">
-                        Название
-                    </label>
-                    <input
-                        className="form-input"
-                        id="category-form-name"
-                        type="text"
-                        value={name}
-                        placeholder="Например, Go"
-                        onChange={this.handleNameChange}
-                    />
-                </div>
-
-                <div className="form-row">
-                    <div className="form-field">
-                        <label className="form-label" htmlFor="category-form-slug">
-                            Slug
-                        </label>
-                        <input
-                            className="form-input"
-                            id="category-form-slug"
+            <form onSubmit={this.handleSubmit}>
+                <div className="max-w-2xl rounded-2xl border bg-card p-6">
+                    <div className="space-y-2">
+                        <Label htmlFor="category-form-name">Название</Label>
+                        <Input
+                            id="category-form-name"
                             type="text"
-                            value={slug}
-                            placeholder="go"
-                            onChange={this.handleSlugChange}
+                            value={name}
+                            placeholder="Например, Go"
+                            onChange={this.handleNameChange}
                         />
                     </div>
 
-                    <div className="form-field">
-                        <label className="form-label" htmlFor="category-form-sort-order">
-                            Порядок
-                        </label>
-                        <input
-                            className="form-input"
-                            id="category-form-sort-order"
-                            type="number"
-                            min={0}
-                            value={sortOrder}
-                            placeholder="0"
-                            onChange={this.handleSortOrderChange}
-                        />
+                    <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        <div className="space-y-2">
+                            <Label htmlFor="category-form-slug">Slug</Label>
+                            <Input
+                                id="category-form-slug"
+                                type="text"
+                                value={slug}
+                                placeholder="go"
+                                onChange={this.handleSlugChange}
+                            />
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label htmlFor="category-form-sort-order">Порядок</Label>
+                            <Input
+                                id="category-form-sort-order"
+                                type="number"
+                                min={0}
+                                value={sortOrder}
+                                placeholder="0"
+                                onChange={this.handleSortOrderChange}
+                            />
+                        </div>
                     </div>
-                </div>
 
-                {error && <p className="form-error">{error}</p>}
+                    {error ? (
+                        <p className="mt-4 rounded-xl border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+                            {error}
+                        </p>
+                    ) : null}
 
-                <div className="form-actions">
-                    <SubmitButton disabled={submitting}>
-    {submitting ? 'Создаём…' : 'Добавить категорию'}
-</SubmitButton>
+                    <div className="mt-5 flex justify-end">
+                        <Button
+                            type="submit"
+                            disabled={submitting}
+                            className="h-10 rounded-full bg-brand px-5 text-brand-foreground hover:opacity-90"
+                        >
+                            {submitting ? 'Создаём…' : 'Добавить категорию'}
+                        </Button>
+                    </div>
                 </div>
             </form>
         )

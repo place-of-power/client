@@ -66,7 +66,7 @@ class ArticleCard extends Component<ArticleCardProps> {
                                     {author.initials}
                                 </AvatarFallback>
                             </Avatar>
-                            <span className="truncate text-sm font-medium text-foreground">
+                            <span className="truncate text-xs font-medium text-foreground">
                                 {author.name}
                             </span>
                         </div>

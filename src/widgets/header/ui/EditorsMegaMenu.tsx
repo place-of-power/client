@@ -60,7 +60,7 @@ class EditorsMegaMenu extends Component {
     render() {
         return (
             <NavigationMenuItem>
-                <NavigationMenuTrigger className="h-9 rounded-full px-4 text-sm font-medium">
+                <NavigationMenuTrigger className="h-9 rounded-full px-4 text-sm font-medium text-foreground">
                     Редакторы ЯП
                 </NavigationMenuTrigger>
                 <NavigationMenuContent className="!w-[min(92vw,860px)] !p-0">

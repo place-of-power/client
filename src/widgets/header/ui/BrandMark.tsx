@@ -21,7 +21,7 @@ class BrandMark extends Component<BrandMarkProps> {
                     <span className="absolute -top-0.5 -right-0.5 size-2.5 rounded-full bg-emerald-400 ring-2 ring-background" />
                 </span>
                 <span className="flex flex-col leading-none">
-                    <span className="text-[0.95rem] font-bold tracking-tight">Place of Power</span>
+                    <span className="text-[0.95rem] font-bold tracking-tight text-foreground">Place of Power</span>
                     <span className="text-[0.66rem] font-medium tracking-[0.18em] text-muted-foreground uppercase">
                         IT · AI · Code
                     </span>

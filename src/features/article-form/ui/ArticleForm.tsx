@@ -4,8 +4,8 @@ import { createArticle, fetchCategories } from '@/shared/api'
 import type { ArticleInput } from '@/shared/api'
 import { parseMarkdown } from '@/shared/lib/markdown'
 import type { ArticleStatus, Category } from '@/shared/model'
-import { MarkdownContent, Select, SubmitButton } from '@/shared/ui'
-import './ArticleForm.css'
+import { MarkdownContent, Select } from '@/shared/ui'
+import { Button, Input, Label, Textarea } from '@/shared/ui/kit'
 
 interface MarkdownTool {
     label: string
@@ -172,113 +172,125 @@ class ArticleForm extends Component<ArticleFormProps, ArticleFormState> {
         const previewHtml = parseMarkdown(content).html
 
         return (
-            <form className="form" onSubmit={this.handleSubmit}>
-                <div className="form-field">
-                    <label className="form-label" htmlFor="article-form-title">
-                        Заголовок
-                    </label>
-                    <input
-                        className="form-input"
-                        id="article-form-title"
-                        type="text"
-                        value={title}
-                        placeholder="О чём статья"
-                        onChange={this.handleTitleChange}
-                    />
-                </div>
+            <form onSubmit={this.handleSubmit}>
+                <div className="grid grid-cols-1 gap-8 xl:grid-cols-[minmax(0,1fr)_26rem]">
+                    <div className="space-y-6">
+                        <div className="rounded-2xl border bg-card p-6">
+                            <div className="space-y-2">
+                                <Label htmlFor="article-form-title">Заголовок</Label>
+                                <Input
+                                    id="article-form-title"
+                                    type="text"
+                                    value={title}
+                                    placeholder="О чём статья"
+                                    onChange={this.handleTitleChange}
+                                />
+                            </div>
 
-                <div className="form-row">
-                    <div className="form-field">
-                        <label className="form-label" htmlFor="article-form-category">
-                            Категория
-                        </label>
-                        <Select
-                            id="article-form-category"
-                            value={categoryId}
-                            options={categories.map((item) => ({
-                                value: item.id,
-                                label: item.name,
-                            }))}
-                            onChange={this.handleCategoryChange}
-                        />
-                    </div>
+                            <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                                <div className="space-y-2">
+                                    <Label htmlFor="article-form-category">Категория</Label>
+                                    <Select
+                                        id="article-form-category"
+                                        value={categoryId}
+                                        options={categories.map((item) => ({
+                                            value: item.id,
+                                            label: item.name,
+                                        }))}
+                                        onChange={this.handleCategoryChange}
+                                    />
+                                </div>
 
-                    <div className="form-field">
-                        <label className="form-label" htmlFor="article-form-status">
-                            Статус
-                        </label>
-                        <Select
-                            id="article-form-status"
-                            value={status}
-                            options={[
-                                { value: 'published', label: 'Опубликовано' },
-                                { value: 'draft', label: 'Черновик' },
-                            ]}
-                            onChange={this.handleStatusChange}
-                        />
-                    </div>
-                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="article-form-status">Статус</Label>
+                                    <Select
+                                        id="article-form-status"
+                                        value={status}
+                                        options={[
+                                            { value: 'published', label: 'Опубликовано' },
+                                            { value: 'draft', label: 'Черновик' },
+                                        ]}
+                                        onChange={this.handleStatusChange}
+                                    />
+                                </div>
+                            </div>
 
-                <div className="form-field">
-                    <label className="form-label" htmlFor="article-form-description">
-                        Краткое описание
-                    </label>
-                    <textarea
-                        className="form-textarea"
-                        id="article-form-description"
-                        value={description}
-                        rows={2}
-                        placeholder="Одно-два предложения для карточки"
-                        onChange={this.handleDescriptionChange}
-                    />
-                </div>
+                            <div className="mt-5 space-y-2">
+                                <Label htmlFor="article-form-description">Краткое описание</Label>
+                                <Textarea
+                                    id="article-form-description"
+                                    value={description}
+                                    rows={2}
+                                    placeholder="Одно-два предложения для карточки"
+                                    onChange={this.handleDescriptionChange}
+                                />
+                            </div>
+                        </div>
 
-                <div className="form-field">
-                    <label className="form-label" htmlFor="article-form-content">
-                        Содержимое (Markdown)
-                    </label>
-                    <div className="article-form-toolbar">
-                        {MARKDOWN_TOOLS.map((tool) => (
-                            <button
-                                key={tool.label}
-                                className="article-form-tool"
-                                type="button"
-                                title={tool.title}
-                                onClick={() => this.insertTool(tool)}
-                            >
-                                {tool.label}
-                            </button>
-                        ))}
-                    </div>
-                    <textarea
-                        className="form-textarea article-form-editor-input"
-                        id="article-form-content"
-                        ref={this.contentRef}
-                        value={content}
-                        placeholder={'## Заголовок раздела\n\nТекст статьи…'}
-                        onChange={this.handleContentChange}
-                    />
-                </div>
+                        <div className="rounded-2xl border bg-card p-6">
+                            <div className="flex flex-wrap items-center justify-between gap-2">
+                                <Label htmlFor="article-form-content">Содержимое (Markdown)</Label>
+                                <div className="flex flex-wrap gap-1">
+                                    {MARKDOWN_TOOLS.map((tool) => (
+                                        <Button
+                                            key={tool.label}
+                                            type="button"
+                                            variant="outline"
+                                            size="sm"
+                                            title={tool.title}
+                                            className="h-7 rounded-full px-2.5 text-xs"
+                                            onClick={() => this.insertTool(tool)}
+                                        >
+                                            {tool.label}
+                                        </Button>
+                                    ))}
+                                </div>
+                            </div>
+                            <Textarea
+                                id="article-form-content"
+                                innerRef={this.contentRef}
+                                value={content}
+                                rows={18}
+                                placeholder={'## Заголовок раздела\n\nТекст статьи…'}
+                                onChange={this.handleContentChange}
+                                className="mt-3 font-mono text-sm leading-relaxed"
+                            />
+                        </div>
 
-                <div className="form-field">
-                    <span className="form-label">Предпросмотр</span>
-                    <div className="article-form-preview">
-                        {content.trim() ? (
-                            <MarkdownContent html={previewHtml} />
-                        ) : (
-                            <p className="article-form-preview-empty">
-                                Здесь появится статья по мере ввода.
+                        {error ? (
+                            <p className="rounded-xl border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+                                {error}
                             </p>
-                        )}
+                        ) : null}
+
+                        <div className="flex justify-end">
+                            <Button
+                                type="submit"
+                                size="lg"
+                                disabled={submitting}
+                                className="h-11 rounded-full bg-brand px-6 text-brand-foreground hover:opacity-90"
+                            >
+                                {submitting ? 'Публикуем…' : 'Создать статью'}
+                            </Button>
+                        </div>
                     </div>
-                </div>
 
-                {error && <p className="form-error">{error}</p>}
-
-                <div className="form-actions">
-                    <SubmitButton disabled={submitting}>
-                        {submitting ? 'Публикуем…' : 'Создать статью'}
-                    </SubmitButton>
+                    <aside className="hidden xl:block">
+                        <div className="sticky top-24 rounded-2xl border bg-card p-4">
+                            <p className="text-[0.7rem] font-semibold tracking-wider text-muted-foreground uppercase">
+                                Предпросмотр
+                            </p>
+                            <div className="scroll-thin mt-3 max-h-[70vh] overflow-y-auto rounded-xl bg-background p-4">
+                                {content.trim() ? (
+                                    <MarkdownContent html={previewHtml} />
+                                ) : (
+                                    <p className="text-sm text-muted-foreground">
+                                        Здесь появится статья по мере ввода.
+                                    </p>
+                                )}
+                            </div>
+                        </div>
+                    </aside>
                 </div>
             </form>
         )

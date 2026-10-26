@@ -3,6 +3,8 @@ export { buttonVariants } from './buttonVariants.ts'
 export { default as Badge } from './Badge.tsx'
 export { badgeVariants } from './badgeVariants.ts'
 export { default as Input } from './Input.tsx'
+export { default as Textarea } from './Textarea.tsx'
+export { default as Label } from './Label.tsx'
 export { default as Separator } from './Separator.tsx'
 export { default as Avatar, AvatarImage, AvatarFallback } from './Avatar.tsx'
 export {

@@ -1,11 +1,11 @@
 import { Component } from 'react'
 import { fetchArticles } from '@/shared/api'
 import type { ArticlePreview } from '@/shared/api'
-import { ArticleGrid } from '@/widgets/article-grid'
 import { CategoriesShowcase } from '@/widgets/categories-showcase'
 import { EditorsSection } from '@/widgets/editors-section'
 import { FeaturedPosts } from '@/widgets/featured-posts'
 import { Hero } from '@/widgets/hero'
+import { PostsGrid } from '@/widgets/posts-grid'
 
 type HomePageProps = Record<string, never>
 
@@ -49,15 +49,13 @@ class HomePage extends Component<HomePageProps, HomePageState> {
 
                 <EditorsSection />
 
-                <main className="page">
-                    {!loading && error && <p className="page-status">{error}</p>}
+                {!loading && error && (
+                    <div className="mx-auto w-full max-w-[var(--container)] px-[var(--gutter)] py-10">
+                        <p className="page-status">{error}</p>
+                    </div>
+                )}
 
-                    {!loading && !error && (
-                        <div id="latest" className="scroll-mt-24">
-                            <ArticleGrid title="Последние статьи" articles={articles} />
-                        </div>
-                    )}
-                </main>
+                {!loading && !error && <PostsGrid articles={articles} />}
             </>
         )
     }

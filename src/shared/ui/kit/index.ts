@@ -34,3 +34,4 @@ export {
     NavigationMenuIndicator,
 } from './NavigationMenu.tsx'
 export { navigationMenuTriggerStyle } from './navigationMenuTriggerStyle.ts'
+export { default as Tabs, TabsList, TabsTrigger, TabsContent } from './Tabs.tsx'

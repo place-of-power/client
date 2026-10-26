@@ -60,7 +60,7 @@ class CategoriesShowcase extends Component {
                                             {category.subcategories.length} подкатегорий
                                         </span>
                                     </div>
-                                    <h3 className="mt-4 text-lg font-semibold tracking-tight">
+                                    <h3 className="mt-4 text-base font-semibold tracking-tight text-foreground">
                                         {category.name}
                                     </h3>
                                     <p className="mt-1 text-sm text-muted-foreground">
@@ -80,7 +80,7 @@ class CategoriesShowcase extends Component {
                                                                 category.gradient,
                                                             )}
                                                         />
-                                                        <span className="font-medium">
+                                                        <span className="text-xs font-medium text-foreground">
                                                             {subcategory.name}
                                                         </span>
                                                     </span>

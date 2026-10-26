@@ -3,6 +3,7 @@ import { fetchArticles } from '@/shared/api'
 import type { ArticlePreview } from '@/shared/api'
 import { ArticleGrid } from '@/widgets/article-grid'
 import { CategoriesShowcase } from '@/widgets/categories-showcase'
+import { FeaturedPosts } from '@/widgets/featured-posts'
 import { Hero } from '@/widgets/hero'
 
 type HomePageProps = Record<string, never>
@@ -42,6 +43,8 @@ class HomePage extends Component<HomePageProps, HomePageState> {
                 <Hero article={articles[0]} articlesCount={articles.length} />
 
                 <CategoriesShowcase />
+
+                <FeaturedPosts articles={articles} />
 
                 <main className="page">
                     {!loading && error && <p className="page-status">{error}</p>}

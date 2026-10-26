@@ -10,6 +10,14 @@
 /* Тема живёт в атрибуте data-theme (см. index.html), а не в классе .dark */
 @custom-variant dark (&:is([data-theme='dark'] *));
 
+/* По умолчанию рамки у всех элементов — цвет темы, иначе они наследуют
+   currentColor (тёмный текст) и перестают реагировать на --ui-border */
+@layer base {
+    * {
+        @apply border-border outline-ring/50;
+    }
+}
+
 /* Токены дизайна неймспейснуты --ui-*, чтобы не перебивать токены клиента
    (--border, --accent, --accent-bg уже заняты). */
 :root {

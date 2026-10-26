@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { PenLine } from 'lucide-react'
 import { paths } from '@/shared/config'
 import { MoonIcon, SunIcon } from '@/shared/ui/icons'
-import { Button, NavigationMenu, NavigationMenuItem, NavigationMenuList, navigationMenuTriggerStyle } from '@/shared/ui/kit'
+import { Button, NavigationMenu, NavigationMenuList } from '@/shared/ui/kit'
 import { cn } from '@/shared/lib/cn'
 import BrandMark from './BrandMark.tsx'
 import CategoriesMegaMenu from './CategoriesMegaMenu.tsx'
@@ -79,21 +79,6 @@ class Header extends Component<Record<string, never>, HeaderState> {
                             <NavigationMenuList className="gap-0.5">
                                 <CategoriesMegaMenu />
                                 <EditorsMegaMenu />
-                                <NavigationMenuItem>
-                                    <Link to={paths.home} className={navigationMenuTriggerStyle()}>
-                                        Главная
-                                    </Link>
-                                </NavigationMenuItem>
-                                <NavigationMenuItem>
-                                    <Link to={paths.categories} className={navigationMenuTriggerStyle()}>
-                                        Каталог
-                                    </Link>
-                                </NavigationMenuItem>
-                                <NavigationMenuItem>
-                                    <Link to={paths.create} className={navigationMenuTriggerStyle()}>
-                                        Создать
-                                    </Link>
-                                </NavigationMenuItem>
                             </NavigationMenuList>
                         </NavigationMenu>
                     </div>

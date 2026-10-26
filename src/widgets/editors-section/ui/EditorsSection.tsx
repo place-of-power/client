@@ -1,7 +1,7 @@
 import { Component } from 'react'
 import { ArrowUpRight, ExternalLink, Terminal } from 'lucide-react'
 import { allEditors, editorGroups } from '@/shared/config'
-import { Badge } from '@/shared/ui/kit'
+import { Badge, Button } from '@/shared/ui/kit'
 import { cn } from '@/shared/lib/cn'
 
 class EditorMarquee extends Component {
@@ -133,6 +133,17 @@ class EditorsSection extends Component {
                                 </div>
                             </div>
                         ))}
+                    </div>
+
+                    <div className="mt-12 flex flex-col items-center gap-3 rounded-2xl border bg-muted/30 p-6 text-center sm:p-8">
+                        <h3 className="text-lg font-semibold">Не нашли нужную песочницу?</h3>
+                        <p className="max-w-xl text-sm text-muted-foreground">
+                            Мы постоянно расширяем справочник. Напишите нам, какой онлайн-редактор
+                            добавить — и&nbsp;он появится в&nbsp;следующем выпуске дайджеста.
+                        </p>
+                        <Button asChild variant="outline" className="mt-1 rounded-full">
+                            <a href="#newsletter">Предложить редактор</a>
+                        </Button>
                     </div>
                 </div>
             </section>

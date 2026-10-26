@@ -95,3 +95,88 @@ export function blockContent(block: ContentBlock): string {
             return `${block.title ?? ''} ${block.text}`
     }
 }
+
+/** «Анна Соколова» → «АС»; одиночное имя → первые две буквы */
+export function initialsOf(name: string): string {
+    const parts = name.trim().split(/\s+/).filter(Boolean)
+
+    if (parts.length === 0) return '??'
+
+    const first = parts[0]?.[0] ?? ''
+    const second = parts.length > 1 ? parts[parts.length - 1]?.[0] ?? '' : parts[0]?.[1] ?? ''
+
+    return (first + second).toUpperCase()
+}
+
+/** Оценка времени чтения по блокам (~180 слов/мин) */
+export function estimateReadTime(blocks: ContentBlock[]): number {
+    let words = 0
+
+    for (const block of blocks) {
+        switch (block.type) {
+            case 'paragraph':
+            case 'heading':
+            case 'quote':
+                words += block.text.split(/\s+/).filter(Boolean).length
+                break
+            case 'list':
+            case 'takeaways':
+                words += block.items.join(' ').split(/\s+/).filter(Boolean).length
+                break
+            case 'code':
+                words += Math.ceil(block.code.length / 40)
+                break
+            case 'callout':
+                words += `${block.title ?? ''} ${block.text}`.split(/\s+/).filter(Boolean).length
+                break
+        }
+    }
+
+    return Math.max(1, Math.round(words / 180))
+}
+
+/** Суммарное количество слов в блоках (для счётчика в редакторе) */
+export function countWords(blocks: ContentBlock[]): number {
+    let words = 0
+
+    for (const block of blocks) {
+        switch (block.type) {
+            case 'paragraph':
+            case 'heading':
+            case 'quote':
+                words += block.text.split(/\s+/).filter(Boolean).length
+                break
+            case 'list':
+            case 'takeaways':
+                words += block.items.join(' ').split(/\s+/).filter(Boolean).length
+                break
+            case 'code':
+                words += block.code.split(/\s+/).filter(Boolean).length
+                break
+            case 'callout':
+                words += `${block.title ?? ''} ${block.text}`.split(/\s+/).filter(Boolean).length
+                break
+        }
+    }
+
+    return words
+}
+
+const BLOCK_ERRORS: Record<ContentBlock['type'], string> = {
+    paragraph: 'Введите текст абзаца',
+    heading: 'Введите заголовок',
+    list: 'Добавьте пункты списка',
+    code: 'Введите код',
+    quote: 'Введите текст цитаты',
+    callout: 'Введите текст врезки',
+    takeaways: 'Добавьте пункты «Что запомнить»',
+}
+
+/** Ошибка валидации конкретного блока (пустая строка = блок валиден) */
+export function blockError(block: ContentBlock): string {
+    if (blockContent(block).trim() === '') {
+        return BLOCK_ERRORS[block.type]
+    }
+
+    return ''
+}

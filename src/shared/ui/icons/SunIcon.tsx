@@ -4,7 +4,16 @@ import type { IconProps } from './types.ts'
 class SunIcon extends Component<IconProps> {
     render() {
         return (
-            <svg className={this.props.className} viewBox="0 0 24 24" aria-hidden="true">
+            <svg
+                className={this.props.className}
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+            >
                 <circle cx="12" cy="12" r="4.5" />
                 <line x1="12" y1="2.5" x2="12" y2="5" />
                 <line x1="12" y1="19" x2="12" y2="21.5" />

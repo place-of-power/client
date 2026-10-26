@@ -8,6 +8,7 @@ import { CreateCategoryPage } from '@/pages/create-category'
 import { HomePage } from '@/pages/home'
 import { ManageCategoriesPage } from '@/pages/manage-categories'
 import { ROUTES } from '@/shared/config'
+import { Footer } from '@/widgets/footer'
 import { Header } from '@/widgets/header'
 
 class App extends Component {
@@ -25,6 +26,7 @@ class App extends Component {
                     <Route path={ROUTES.create} element={<CreateArticlePage />} />
                     <Route path="*" element={<Navigate to={ROUTES.home} replace />} />
                 </Routes>
+                <Footer />
             </BrowserRouter>
         )
     }

@@ -64,10 +64,10 @@ class Header extends Component<Record<string, never>, HeaderState> {
         return (
             <header
                 className={cn(
-                    'sticky top-0 z-50 h-16 w-full transition-all',
+                    'sticky top-0 z-50 h-16 w-full border-b bg-background transition-all',
                     scrolled
-                        ? 'border-b bg-background/80 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60'
-                        : 'border-b border-transparent',
+                        ? 'bg-background/80 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60'
+                        : 'border-transparent',
                 )}
             >
                 <div className="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-emerald-500/40 to-transparent" />

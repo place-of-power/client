@@ -1,9 +1,9 @@
 /* Tailwind для портированного дизайна блога «Синтаксис».
-   shortcut: preflight не подключён (нет tailwindcss/preflight.css), чтобы не
-   сбрасывать текущие стили клиента; подключать вместе с портированными
-   страницами, когда базовые правила app/styles/index.css переедут в @layer base. */
-@layer theme;
+   preflight подключён в @layer base: базовые правила app/styles/index.css
+   лежат вне слоёв и поэтому по-прежнему перебивают сброс. */
+@layer theme, base, components, utilities;
 @import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/preflight.css' layer(base);
 @import 'tw-animate-css';
 @import 'tailwindcss/utilities.css';
 

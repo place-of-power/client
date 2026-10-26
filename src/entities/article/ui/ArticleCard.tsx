@@ -74,7 +74,7 @@ class ArticleCard extends Component<ArticleCardProps> {
                             asChild
                             size="sm"
                             variant="ghost"
-                            className="h-8 rounded-full px-3.5 text-[0.8rem]"
+                            className="h-8 rounded-full px-3.5 text-[0.8rem] text-foreground"
                         >
                             <Link to={paths.article(article.slug)}>
                                 Читать{' '}

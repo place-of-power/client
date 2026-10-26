@@ -1,6 +1,7 @@
 export * from './highlight/index.ts'
 export * from './markdown/index.ts'
 export * from './slug/index.ts'
+export * from './cn/index.ts'
 export * from './actions/category/deleteCategory.ts'
 export * from './actions/category/createCategory.ts'
 export * from './actions/category/reorderCategories.ts'

@@ -11,6 +11,9 @@ export default defineConfig({
     },
   },
   plugins: [react(), tailwindcss()],
+  build: {
+    chunkSizeWarningLimit: 700,
+  },
   server: {
     host: true,
     watch: {

@@ -51,11 +51,20 @@ Ponytail, режим ленивого сеньора
   слайса — через `@/...`; файлы — с явным расширением (`./App.tsx`,
   `./routes.ts`).
 - `app` — композиция и роутинг (`app/App.tsx`, `app/main.tsx`), глобальные
-  стили (`app/styles/index.css`). `shared/ui` — переиспользуемые компоненты
-  (в т.ч. `shared/ui/icons`, `shared/ui/form` — `Select`, `SubmitButton` и общие
-  классы полей форм), `shared/lib` — markdown, подсветка и `slug`
+  стили (`app/styles/index.css`, `app/styles/tailwind.css`). `shared/ui` —
+  переиспользуемые компоненты (иконки `shared/ui/icons`, диалог
+  `shared/ui/dialogs` — `ConfirmDialog`, `shared/ui/post-cover` — `PostCover`,
+  `MarkdownContent`), `shared/lib` — markdown, подсветка и `slug`
   (транслитерация), `shared/api` — данные и DTO-типы, `shared/config` —
   маршруты, `shared/model` — доменные типы.
+- Примитивный UI живет в `shared/ui/kit` (`Button`, `Badge`, `Input`,
+  `Textarea`, `Label`, `Separator`, `Avatar`, `Accordion`, `Sheet`,
+  `NavigationMenu`, `Tabs`, `Select` + `*Variants`). Это классовые обёртки над
+  shadcn/Radix, подключаются только через `@/shared/ui/kit` (не через
+  `shared/ui/index.ts` — там имена конфликтуют с иконками/диалогами). Составной
+  примитив (Radix-пары Root/Content/Item) живёт одним файлом с именованными
+  экспортами частей — это осознанное исключение из правила «один компонент —
+  один файл».
 - Компоненты лежат в `ui/` слайса, стили — рядом. Каждый компонент —
   `export default` из своего файла плюс реэкспорт из barrel'а слайса.
 
@@ -86,21 +95,21 @@ Ponytail, режим ленивого сеньора
   `--cover-gradient`; радиусы `--radius-sm|md|lg|xl|pill`; лейаут
   `--container: 1126px`, `--gutter: 24px`; шрифты `--sans`, `--heading`,
   `--mono`.
+- Tailwind 4 подключён через `app/styles/tailwind.css` (его импортирует
+  `main.tsx` после `index.css`): theme+utilities+preflight в `@layer (…)`,
+  `dark`-вариант на `[data-theme='dark']`, emerald-акцент. Токены дизайна
+  неймспейснуты `--ui-*` и отображаются в утилиты через `@theme inline`
+  (`bg-background`, `text-muted-foreground` и т.д.). Кастомные утилиты
+  (`bg-brand`, `animate-blob`, `bg-grid`, `animate-marquee`, `scroll-thin`,
+  `marquee-mask`, `--animate-accordion-*`) — там же.
+- Новые экраны портированного дизайна вёрстатся Tailwind-утилитами прямо в
+  TSX (плюс `cn` из `shared/lib/cn`); соседние `.css` оставляем только там, где
+  утилитой не обойтись (например, типографика markdown в `MarkdownContent.css`).
+  Каркас (`.page`) и токены остаются в `index.css` и не дублируются.
 - Лейаут: `#root` — на всю ширину (flex-колонка), контент страницы
   центрируется классом `.page` (`max-width: var(--container)` + паддинги
   `var(--gutter)`). Тема — атрибут `data-theme` на `<html>` (anti-FOUC скрипт
   в `index.html`).
-- Стилизуй компонент в его собственном `.css`, классами с префиксом блока;
-  модификатор — `--mod`, состояние — `.active`. Не стилизуй внутренние классы
-  чужих компонентов; контекстные оверрайды допустимы только для чисто
-  презентационных вещей (отступы/выравнивание), напр.
-  `.home-categories .link-button`.
-- Поля, лейблы и кнопки форм берут общие классы `.form*` из
-  `shared/ui/form/form.css` (`.form`, `.form-field`, `.form-row`,
-  `.form-label`, `.form-input`, `.form-textarea`, `.form-error`,
-  `.form-actions`, `.form-submit`), а кнопка отправки — компонент
-  `SubmitButton`. В CSS фичи остаются только специфичные блоки, напр.
-  `article-form-toolbar`.
 - Общий вид: серый фон страницы (`--bg-page`), белые поверхности (`--bg`) с
   рамкой `--border` и радиусом `--radius-xl`. Медиа-запросы — точки `1024px` и
   `640px`.

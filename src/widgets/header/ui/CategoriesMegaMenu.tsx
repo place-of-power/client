@@ -25,7 +25,7 @@ class MegaCategoryCard extends Component<{ category: BlogCategory }> {
                                 category.gradient,
                             )}
                         >
-                            <Icon className="size-[1.05rem]" />
+                            <Icon className="size-[1.05rem] text-white" />
                         </span>
                         <div className="min-w-0">
                             <p className="truncate text-sm leading-tight font-semibold">

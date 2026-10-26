@@ -52,7 +52,7 @@ class Footer extends Component {
                             <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
                                 «Place of Power» — русскоязычный блог о программировании,
                                 искусственном интеллекте и инфраструктуре. Объясняем сложное
-                                простым языком и собираем справочник онлайн-редакторов ЯП.
+                                простым языком.
                             </p>
                         </div>
 

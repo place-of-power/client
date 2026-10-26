@@ -137,8 +137,7 @@ class Hero extends Component<HeroProps> {
 
                             <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-pretty text-muted-foreground sm:text-lg lg:mx-0">
                                 Архитектура LLM, веб-разработка, программирование и DevOps — без
-                                воды и хайпа. А ещё — удобный справочник онлайн-редакторов языков
-                                программирования в одном месте.
+                                воды и хайпа.
                             </p>
 
                             <form

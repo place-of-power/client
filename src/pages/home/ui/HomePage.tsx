@@ -2,7 +2,6 @@ import { Component } from 'react'
 import { fetchArticles } from '@/shared/api'
 import type { ArticlePreview } from '@/shared/api'
 import { CategoriesShowcase } from '@/widgets/categories-showcase'
-import { EditorsSection } from '@/widgets/editors-section'
 import { FeaturedPosts } from '@/widgets/featured-posts'
 import { Hero } from '@/widgets/hero'
 import { PostsGrid } from '@/widgets/posts-grid'
@@ -43,11 +42,9 @@ class HomePage extends Component<HomePageProps, HomePageState> {
             <>
                 <Hero article={articles[0]} articlesCount={articles.length} />
 
-                <CategoriesShowcase />
+<CategoriesShowcase />
 
                 <FeaturedPosts articles={articles} />
-
-                <EditorsSection />
 
                 {!loading && error && (
                     <div className="mx-auto w-full max-w-[var(--container)] px-[var(--gutter)] py-10">

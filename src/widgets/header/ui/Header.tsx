@@ -7,7 +7,6 @@ import { Button, NavigationMenu, NavigationMenuList } from '@/shared/ui/kit'
 import { cn } from '@/shared/lib/cn'
 import BrandMark from './BrandMark.tsx'
 import CategoriesMegaMenu from './CategoriesMegaMenu.tsx'
-import EditorsMegaMenu from './EditorsMegaMenu.tsx'
 import HeaderMobileMenu from './HeaderMobileMenu.tsx'
 
 type Theme = 'light' | 'dark'
@@ -78,7 +77,6 @@ class Header extends Component<Record<string, never>, HeaderState> {
                         <NavigationMenu className="ml-2">
                             <NavigationMenuList className="gap-0.5">
                                 <CategoriesMegaMenu />
-                                <EditorsMegaMenu />
                             </NavigationMenuList>
                         </NavigationMenu>
                     </div>

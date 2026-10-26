@@ -1,7 +1,7 @@
 import { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { ExternalLink, Menu } from 'lucide-react'
-import { editorGroups, paths } from '@/shared/config'
+import { Menu } from 'lucide-react'
+import { paths } from '@/shared/config'
 import { blogCategories } from '@/shared/api/mock/blog-categories'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger, Separator, Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/shared/ui/kit'
 import { cn } from '@/shared/lib/cn'
@@ -80,51 +80,6 @@ class HeaderMobileMenu extends Component<Record<string, never>, { open: boolean 
                                             )
                                         })}
                                     </ul>
-                                </AccordionContent>
-                            </AccordionItem>
-
-                            <AccordionItem value="editors" className="border-b-0">
-                                <AccordionTrigger className="px-3 text-sm font-semibold hover:no-underline">
-                                    Онлайн-редакторы ЯП
-                                </AccordionTrigger>
-                                <AccordionContent className="pb-2">
-                                    {editorGroups.map((group) => (
-                                        <div key={group.slug} className="mb-3 last:mb-0">
-                                            <p className="px-3 pb-1 text-[0.65rem] font-semibold tracking-wider text-muted-foreground uppercase">
-                                                {group.label}
-                                            </p>
-                                            <ul className="space-y-0.5">
-                                                {group.editors.map((editor) => (
-                                                    <li key={editor.name}>
-                                                        <a
-                                                            href={editor.url}
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                            className="flex items-center gap-2.5 rounded-lg px-3 py-2 hover:bg-accent"
-                                                        >
-                                                            <span
-                                                                className={cn(
-                                                                    'grid size-7 shrink-0 place-items-center rounded-md bg-gradient-to-br text-[0.6rem] font-bold text-white',
-                                                                    editor.gradient,
-                                                                )}
-                                                            >
-                                                                {editor.monogram}
-                                                            </span>
-                                                            <span className="min-w-0 flex-1">
-                                                                <span className="block truncate text-sm font-medium">
-                                                                    {editor.name}
-                                                                </span>
-                                                                <span className="block truncate text-[0.68rem] text-muted-foreground">
-                                                                    {editor.description}
-                                                                </span>
-                                                            </span>
-                                                            <ExternalLink className="size-3.5 shrink-0 text-muted-foreground" />
-                                                        </a>
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        </div>
-                                    ))}
                                 </AccordionContent>
                             </AccordionItem>
                         </Accordion>

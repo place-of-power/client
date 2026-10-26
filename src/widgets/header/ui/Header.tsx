@@ -1,9 +1,7 @@
 import { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { PenLine } from 'lucide-react'
-import { fetchCategories } from '@/shared/api'
 import { paths } from '@/shared/config'
-import type { Category } from '@/shared/model/category'
 import { MoonIcon, SunIcon } from '@/shared/ui/icons'
 import { Button, NavigationMenu, NavigationMenuItem, NavigationMenuList, navigationMenuTriggerStyle } from '@/shared/ui/kit'
 import { cn } from '@/shared/lib/cn'
@@ -17,35 +15,21 @@ type Theme = 'light' | 'dark'
 interface HeaderState {
     theme: Theme
     scrolled: boolean
-    categories: Category[]
 }
 
 class Header extends Component<Record<string, never>, HeaderState> {
     state: HeaderState = {
         theme: this.readTheme(),
         scrolled: false,
-        categories: [],
     }
 
-    mounted = false
-
     componentDidMount() {
-        this.mounted = true
         this.applyTheme(this.state.theme)
         window.addEventListener('scroll', this.handleScroll, { passive: true })
         this.handleScroll()
-
-        fetchCategories()
-            .then((categories) => {
-                if (this.mounted) this.setState({ categories })
-            })
-            .catch(() => {
-                if (this.mounted) this.setState({ categories: [] })
-            })
     }
 
     componentWillUnmount() {
-        this.mounted = false
         window.removeEventListener('scroll', this.handleScroll)
     }
 
@@ -75,7 +59,7 @@ class Header extends Component<Record<string, never>, HeaderState> {
     }
 
     render() {
-        const { theme, scrolled, categories } = this.state
+        const { theme, scrolled } = this.state
 
         return (
             <header
@@ -93,7 +77,7 @@ class Header extends Component<Record<string, never>, HeaderState> {
                     <div className="hidden md:flex">
                         <NavigationMenu className="ml-2">
                             <NavigationMenuList className="gap-0.5">
-                                <CategoriesMegaMenu categories={categories} />
+                                <CategoriesMegaMenu />
                                 <EditorsMegaMenu />
                                 <NavigationMenuItem>
                                     <Link to={paths.home} className={navigationMenuTriggerStyle()}>
@@ -149,7 +133,7 @@ class Header extends Component<Record<string, never>, HeaderState> {
                                 <MoonIcon className="size-[1.15rem]" />
                             )}
                         </Button>
-                        <HeaderMobileMenu categories={categories} />
+                        <HeaderMobileMenu />
                     </div>
                 </div>
             </header>

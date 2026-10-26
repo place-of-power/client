@@ -2,16 +2,12 @@ import { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { ExternalLink, Menu } from 'lucide-react'
 import { editorGroups, paths } from '@/shared/config'
-import type { Category } from '@/shared/model/category'
+import { blogCategories } from '@/shared/api/mock/blog-categories'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger, Separator, Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/shared/ui/kit'
 import { cn } from '@/shared/lib/cn'
 import BrandMark from './BrandMark.tsx'
 
-interface HeaderMobileMenuProps {
-    categories: Category[]
-}
-
-class HeaderMobileMenu extends Component<HeaderMobileMenuProps, { open: boolean }> {
+class HeaderMobileMenu extends Component<Record<string, never>, { open: boolean }> {
     state = { open: false }
 
     handleOpenChange = (open: boolean) => {
@@ -23,7 +19,6 @@ class HeaderMobileMenu extends Component<HeaderMobileMenuProps, { open: boolean 
     }
 
     render() {
-        const { categories } = this.props
         const { open } = this.state
 
         return (
@@ -47,22 +42,43 @@ class HeaderMobileMenu extends Component<HeaderMobileMenuProps, { open: boolean 
                                 </AccordionTrigger>
                                 <AccordionContent className="pb-2">
                                     <ul className="space-y-1">
-                                        {categories.map((category) => (
-                                            <li key={category.id}>
-                                                <Link
-                                                    to={paths.category(category.slug)}
-                                                    onClick={this.close}
-                                                    className="flex items-center gap-2.5 rounded-lg p-2 hover:bg-accent"
-                                                >
-                                                    <span className="grid size-7 shrink-0 place-items-center rounded-md bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-500 text-xs font-bold text-white">
-                                                        {category.name.slice(0, 1).toUpperCase()}
-                                                    </span>
-                                                    <span className="text-sm font-medium">
-                                                        {category.name}
-                                                    </span>
-                                                </Link>
-                                            </li>
-                                        ))}
+                                        {blogCategories.map((category) => {
+                                            const Icon = category.icon
+
+                                            return (
+                                                <li key={category.slug}>
+                                                    <Link
+                                                        to={paths.category(category.slug)}
+                                                        onClick={this.close}
+                                                        className="flex items-start gap-2.5 rounded-lg p-2 hover:bg-accent"
+                                                    >
+                                                        <span
+                                                            className={cn(
+                                                                'grid size-7 shrink-0 place-items-center rounded-md bg-gradient-to-br text-white',
+                                                                category.gradient,
+                                                            )}
+                                                        >
+                                                            <Icon className="size-3.5" />
+                                                        </span>
+                                                        <span className="min-w-0">
+                                                            <span className="block text-sm font-medium">
+                                                                {category.name}
+                                                            </span>
+                                                            <span className="flex flex-wrap gap-1 pt-1">
+                                                                {category.subcategories.map((subcategory) => (
+                                                                    <span
+                                                                        key={subcategory.slug}
+                                                                        className="rounded-full bg-muted px-1.5 py-0.5 text-[0.6rem] text-muted-foreground"
+                                                                    >
+                                                                        {subcategory.name}
+                                                                    </span>
+                                                                ))}
+                                                            </span>
+                                                        </span>
+                                                    </Link>
+                                                </li>
+                                            )
+                                        })}
                                     </ul>
                                 </AccordionContent>
                             </AccordionItem>

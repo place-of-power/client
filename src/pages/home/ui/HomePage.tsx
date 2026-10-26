@@ -1,21 +1,14 @@
 import { Component } from 'react'
-import { fetchArticles, fetchCategories } from '@/shared/api'
-import { paths } from '@/shared/config'
+import { fetchArticles } from '@/shared/api'
 import type { ArticlePreview } from '@/shared/api'
-import type { Category } from '@/shared/model/category'
-import { LinkButton } from '@/shared/ui'
 import { ArticleGrid } from '@/widgets/article-grid'
-import { CategoryTiles } from '@/widgets/category-tiles'
+import { CategoriesShowcase } from '@/widgets/categories-showcase'
 import { Hero } from '@/widgets/hero'
-import './HomePage.css'
-
-const HOME_CATEGORIES_LIMIT = 6
 
 type HomePageProps = Record<string, never>
 
 interface HomePageState {
     articles: ArticlePreview[]
-    categories: Category[]
     loading: boolean
     error: string
 }
@@ -23,7 +16,6 @@ interface HomePageState {
 class HomePage extends Component<HomePageProps, HomePageState> {
     state: HomePageState = {
         articles: [],
-        categories: [],
         loading: true,
         error: '',
     }
@@ -34,36 +26,29 @@ class HomePage extends Component<HomePageProps, HomePageState> {
 
     async load() {
         try {
-            const [articles, categories] = await Promise.all([
-                fetchArticles(),
-                fetchCategories(HOME_CATEGORIES_LIMIT),
-            ])
+            const articles = await fetchArticles()
 
-            this.setState({ articles, categories, loading: false })
+            this.setState({ articles, loading: false })
         } catch {
             this.setState({ error: 'Не удалось загрузить данные с сервера.', loading: false })
         }
     }
 
     render() {
-        const { articles, categories, loading, error } = this.state
+        const { articles, loading, error } = this.state
 
         return (
             <>
                 <Hero article={articles[0]} articlesCount={articles.length} />
 
+                <CategoriesShowcase />
+
                 <main className="page">
                     {!loading && error && <p className="page-status">{error}</p>}
 
                     {!loading && !error && (
-                        <div className="home-sections">
-                            <div className="home-categories">
-                                <CategoryTiles categories={categories} />
-                                <LinkButton to={paths.categories}>Все категории</LinkButton>
-                            </div>
-                            <div id="latest">
-                                <ArticleGrid title="Последние статьи" articles={articles} />
-                            </div>
+                        <div id="latest" className="scroll-mt-24">
+                            <ArticleGrid title="Последние статьи" articles={articles} />
                         </div>
                     )}
                 </main>

@@ -235,7 +235,7 @@ class ManageCategoriesPage extends Component<Record<string, never>, ManageCatego
                 size="icon"
                 onClick={() => this.handleDelete(index)}
                 aria-label={`Удалить: ${category.name}`}
-                className="size-8 rounded-full text-destructive hover:bg-destructive/10 hover:text-destructive"
+                className="size-8 cursor-pointer rounded-full text-destructive hover:bg-destructive/10 hover:text-destructive"
             >
                 <Trash2 className="size-4" />
             </Button>

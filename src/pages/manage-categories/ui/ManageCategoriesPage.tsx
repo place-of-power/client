@@ -20,6 +20,7 @@ interface ManageCategoriesPageState {
     subOrder: Record<string, Subcategory[]>
     loading: boolean
     deleting: Category | null
+    deletingSub: { categorySlug: string; name: string; index: number } | null
     deletingBusy: boolean
     error: string
     dragIndex: number | null
@@ -44,6 +45,7 @@ class ManageCategoriesPage extends Component<Record<string, never>, ManageCatego
         subOrder: {},
         loading: true,
         deleting: null,
+        deletingSub: null,
         deletingBusy: false,
         error: '',
         dragIndex: null,
@@ -101,8 +103,36 @@ class ManageCategoriesPage extends Component<Record<string, never>, ManageCatego
 
     handleCancelDelete = () => {
         if (!this.state.deletingBusy) {
-            this.setState({ deleting: null })
+            this.setState({ deleting: null, deletingSub: null })
         }
+    }
+
+    handleSubDelete = (categorySlug: string, index: number) => () => {
+        const { subOrder } = this.state
+        const sub = (subOrder[categorySlug] ?? [])[index]
+
+        if (!sub) {
+            return
+        }
+
+        this.setState({ deletingSub: { categorySlug, name: sub.name, index }, error: '' })
+    }
+
+    handleConfirmSubDelete = () => {
+        const { deletingBusy, deletingSub, subOrder } = this.state
+
+        if (deletingBusy || !deletingSub) {
+            return
+        }
+
+        const next = (subOrder[deletingSub.categorySlug] ?? []).filter(
+            (_, itemIndex) => itemIndex !== deletingSub.index,
+        )
+
+        this.setState({
+            subOrder: { ...subOrder, [deletingSub.categorySlug]: next },
+            deletingSub: null,
+        })
     }
 
     handleDragStart = (index: number) => () => {
@@ -159,15 +189,6 @@ class ManageCategoriesPage extends Component<Record<string, never>, ManageCatego
         this.setState({ dragSub: null })
     }
 
-    handleSubDelete = (categorySlug: string, index: number) => () => {
-        const { subOrder } = this.state
-        const next = [...(subOrder[categorySlug] ?? [])]
-
-        this.setState({
-            subOrder: { ...subOrder, [categorySlug]: next.filter((_, itemIndex) => itemIndex !== index) },
-        })
-    }
-
     async persistOrder(next: Category[]) {
         const items = next.map((category, index) => ({ id: category.id, sortOrder: index }))
         const result = await reorderCategoriesById(items)
@@ -183,6 +204,7 @@ class ManageCategoriesPage extends Component<Record<string, never>, ManageCatego
             subOrder,
             loading,
             deleting,
+            deletingSub,
             deletingBusy,
             error,
             dragIndex,
@@ -317,15 +339,20 @@ class ManageCategoriesPage extends Component<Record<string, never>, ManageCatego
                 ) : null}
 
                 <ConfirmDialog
-                    open={deleting !== null}
-                    title="Удалить категорию?"
-                    confirmLabel={deletingBusy ? 'Удаляем…' : 'Удалить'}
+                    open={deleting !== null || deletingSub !== null}
+                    title={deletingSub ? 'Удалить подкатегорию?' : 'Удалить категорию?'}
+                    confirmLabel="Удалить"
                     busy={deletingBusy}
-                    onConfirm={this.handleConfirmDelete}
+                    onConfirm={deletingSub ? this.handleConfirmSubDelete : this.handleConfirmDelete}
                     onCancel={this.handleCancelDelete}
                 >
-                    Категория «{deleting?.name}» и все её статьи будут удалены без возможности
-                    восстановления.
+                    {deletingSub ? (
+                        <>Подкатегория «{deletingSub.name}» будет удалена без возможности
+                            восстановления.</>
+                    ) : (
+                        <>Категория «{deleting?.name}» и все её статьи будут удалены без
+                            возможности восстановления.</>
+                    )}
                 </ConfirmDialog>
             </main>
         )

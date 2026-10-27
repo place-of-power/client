@@ -8,7 +8,7 @@ import { deleteCategoryById, reorderCategoriesById } from '@/shared/lib'
 import type { Category } from '@/shared/model/category'
 import { CategoryForm } from '@/features/category-form'
 import { ConfirmDialog } from '@/shared/ui'
-import { Button } from '@/shared/ui/kit'
+import { Button, Input, Label } from '@/shared/ui/kit'
 import { cn } from '@/shared/lib/cn'
 import './ManageCategoriesPage.css'
 
@@ -22,6 +22,7 @@ interface ManageCategoriesPageState {
     subOrder: Record<string, Subcategory[]>
     loading: boolean
     creating: boolean
+    addingSub: { categorySlug: string } | null
     deleting: Category | null
     deletingSub: { categorySlug: string; name: string; index: number } | null
     deletingBusy: boolean
@@ -48,6 +49,7 @@ class ManageCategoriesPage extends Component<Record<string, never>, ManageCatego
         subOrder: {},
         loading: true,
         creating: false,
+        addingSub: null,
         deleting: null,
         deletingSub: null,
         deletingBusy: false,
@@ -122,6 +124,22 @@ class ManageCategoriesPage extends Component<Record<string, never>, ManageCatego
     handleCreated = () => {
         this.setState({ creating: false })
         void this.load()
+    }
+
+    handleOpenAddSub = (categorySlug: string) => () => {
+        this.setState({ addingSub: { categorySlug } })
+    }
+
+    handleCloseAddSub = () => {
+        this.setState({ addingSub: null })
+    }
+
+    handleSubAdded = (categorySlug: string, name: string) => {
+        const { subOrder } = this.state
+        const slug = `${categorySlug}-${Date.now()}`
+        const next = [...(subOrder[categorySlug] ?? []), { name, slug }]
+
+        this.setState({ subOrder: { ...subOrder, [categorySlug]: next }, addingSub: null })
     }
 
     handleSubDelete = (categorySlug: string, index: number) => () => {
@@ -221,6 +239,7 @@ class ManageCategoriesPage extends Component<Record<string, never>, ManageCatego
             subOrder,
             loading,
             creating,
+            addingSub,
             deleting,
             deletingSub,
             deletingBusy,
@@ -349,6 +368,15 @@ className={cn(
                                         </ul>
                                     </div>
                                     <div className="flex items-center self-center">
+                                        <Button
+                                            variant="ghost"
+                                            size="icon"
+                                            onClick={this.handleOpenAddSub(category.slug)}
+                                            aria-label={`Добавить подкатегорию в: ${category.name}`}
+                                            className="size-8 cursor-pointer rounded-full text-muted-foreground hover:bg-accent hover:text-foreground"
+                                        >
+                                            <Plus className="size-4" />
+                                        </Button>
                                         {deleteButton(category, categories.indexOf(category))}
                                     </div>
                                 </li>
@@ -387,9 +415,106 @@ className={cn(
                         </div>
                     </div>
                 ) : null}
+
+                {addingSub ? (
+                    <AddSubcategoryDialog
+                        categoryName={
+                            categories.find((c) => c.slug === addingSub.categorySlug)?.name ??
+                            addingSub.categorySlug
+                        }
+                        categorySlug={addingSub.categorySlug}
+                        onClose={this.handleCloseAddSub}
+                        onAdd={this.handleSubAdded}
+                    />
+                ) : null}
             </main>
         )
     }
 }
 
 export default ManageCategoriesPage
+
+interface AddSubcategoryDialogProps {
+    categorySlug: string
+    categoryName: string
+    onClose: () => void
+    onAdd: (categorySlug: string, name: string) => void
+}
+
+interface AddSubcategoryDialogState {
+    name: string
+    error: string
+}
+
+class AddSubcategoryDialog extends Component<AddSubcategoryDialogProps, AddSubcategoryDialogState> {
+    state: AddSubcategoryDialogState = { name: '', error: '' }
+
+    handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        this.setState({ name: event.target.value })
+    }
+
+    handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
+
+        const name = this.state.name.trim()
+
+        if (!name) {
+            this.setState({ error: 'Введите название подкатегории.' })
+
+            return
+        }
+
+        this.props.onAdd(this.props.categorySlug, name)
+    }
+
+    render() {
+        const { categoryName, onClose } = this.props
+        const { name, error } = this.state
+
+        return (
+            <div className="create-dialog" role="dialog" aria-modal="true" aria-label="Новая подкатегория">
+                <div className="create-dialog-overlay" onClick={onClose} />
+                <div className="create-dialog-panel">
+                    <div className="create-dialog-title">Новая подкатегория</div>
+                    <p className="create-dialog-description">
+                        Подкатегория будет добавлена в категорию «{categoryName}».
+                    </p>
+                    <form onSubmit={this.handleSubmit}>
+                        <div className="space-y-2">
+                            <Label htmlFor="subcategory-form-name">Название</Label>
+                            <Input
+                                id="subcategory-form-name"
+                                type="text"
+                                value={name}
+                                placeholder="Например, TypeScript"
+                                onChange={this.handleChange}
+                                autoFocus
+                            />
+                        </div>
+                        {error ? (
+                            <p className="mt-4 rounded-xl border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+                                {error}
+                            </p>
+                        ) : null}
+                        <div className="mt-5 flex justify-end gap-2">
+                            <Button
+                                type="button"
+                                variant="ghost"
+                                onClick={onClose}
+                                className="h-10 cursor-pointer rounded-full px-5"
+                            >
+                                Отмена
+                            </Button>
+                            <Button
+                                type="submit"
+                                className="h-10 cursor-pointer rounded-full bg-brand px-5 text-brand-foreground hover:opacity-90"
+                            >
+                                Добавить
+                            </Button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        )
+    }
+}

@@ -285,7 +285,7 @@ class ManageCategoriesPage extends Component<Record<string, never>, ManageCatego
                                             ))}
                                         </ul>
                                     </div>
-                                    <div className="flex items-center">
+                                    <div className="flex items-start">
                                         {deleteButton(category, categories.indexOf(category))}
                                     </div>
                                 </li>

@@ -1,0 +1,41 @@
+.create-dialog {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--gutter);
+}
+
+.create-dialog-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.create-dialog-panel {
+    position: relative;
+    width: 100%;
+    max-width: 560px;
+    max-height: calc(100vh - var(--gutter) * 2);
+    overflow-y: auto;
+    padding: 24px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+}
+
+.create-dialog-title {
+    margin: 0 0 6px;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-h);
+}
+
+.create-dialog-description {
+    margin: 0 0 18px;
+    font-size: 14px;
+    color: var(--text);
+}

@@ -8,8 +8,9 @@ import { deleteCategoryById, reorderCategoriesById } from '@/shared/lib'
 import type { Category } from '@/shared/model/category'
 import { CategoryForm } from '@/features/category-form'
 import { ConfirmDialog } from '@/shared/ui'
-import { Button, Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/shared/ui/kit'
+import { Button } from '@/shared/ui/kit'
 import { cn } from '@/shared/lib/cn'
+import './ManageCategoriesPage.css'
 
 interface Subcategory {
     name: string
@@ -373,20 +374,19 @@ class ManageCategoriesPage extends Component<Record<string, never>, ManageCatego
                     )}
                 </ConfirmDialog>
 
-                <Sheet open={creating} onOpenChange={this.handleCloseCreate}>
-                    <SheetContent className="w-full sm:max-w-md">
-                        <SheetHeader>
-                            <SheetTitle>Новая категория</SheetTitle>
-                            <SheetDescription>
+                {creating ? (
+                    <div className="create-dialog" role="dialog" aria-modal="true" aria-label="Новая категория">
+                        <div className="create-dialog-overlay" onClick={this.handleCloseCreate} />
+                        <div className="create-dialog-panel">
+                            <div className="create-dialog-title">Новая категория</div>
+                            <p className="create-dialog-description">
                                 Slug можно оставить пустым — он сгенерируется из названия. Порядок
                                 задаёт позицию в каталоге.
-                            </SheetDescription>
-                        </SheetHeader>
-                        <div className="overflow-y-auto px-6 pb-6">
+                            </p>
                             <CategoryForm onCreated={this.handleCreated} />
                         </div>
-                    </SheetContent>
-                </Sheet>
+                    </div>
+                ) : null}
             </main>
         )
     }

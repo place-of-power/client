@@ -4,9 +4,21 @@ import { createCategoryById, slugify } from '@/shared/lib'
 import type { Category } from '@/shared/model'
 import { FormCard } from '@/shared/ui'
 import { Input, Label, Textarea } from '@/shared/ui/kit'
+import { cn } from '@/shared/lib/cn'
+
+const CATEGORY_GRADIENTS = [
+    'from-emerald-500 via-teal-500 to-cyan-500',
+    'from-cyan-500 via-sky-500 to-blue-500',
+    'from-violet-500 via-purple-500 to-fuchsia-500',
+    'from-amber-500 via-orange-500 to-red-500',
+    'from-teal-500 via-emerald-500 to-green-500',
+    'from-rose-500 via-pink-500 to-red-500',
+] as const
+
+type CategoryGradient = (typeof CATEGORY_GRADIENTS)[number]
 
 interface CategoryFormProps {
-    onCreated: (category: Category) => void
+    onCreated: (category: Category, cover?: string) => void
     onCancel?: () => void
 }
 
@@ -14,6 +26,7 @@ interface CategoryFormState {
     name: string
     slug: string
     description: string
+    gradient: CategoryGradient
     sortOrder: string
     error: string
     slugEdited: boolean
@@ -25,6 +38,7 @@ class CategoryForm extends Component<CategoryFormProps, CategoryFormState> {
         name: '',
         slug: '',
         description: '',
+        gradient: CATEGORY_GRADIENTS[0],
         sortOrder: '',
         error: '',
         slugEdited: false,
@@ -50,6 +64,10 @@ class CategoryForm extends Component<CategoryFormProps, CategoryFormState> {
 
     handleDescriptionChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
         this.setState({ description: event.target.value })
+    }
+
+    handleGradient = (gradient: CategoryGradient) => {
+        this.setState({ gradient })
     }
 
     handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -78,8 +96,8 @@ class CategoryForm extends Component<CategoryFormProps, CategoryFormState> {
                 return
             }
 
-            this.props.onCreated(result.category)
-            this.setState({ name: '', slug: '', description: '', sortOrder: '', error: '', slugEdited: false })
+            this.props.onCreated(result.category, this.state.gradient)
+            this.setState({ name: '', slug: '', description: '', gradient: CATEGORY_GRADIENTS[0], sortOrder: '', error: '', slugEdited: false })
         } catch (error) {
             this.setState({
                 error:
@@ -93,7 +111,7 @@ class CategoryForm extends Component<CategoryFormProps, CategoryFormState> {
     }
 
     render() {
-        const { name, slug, description, sortOrder, error, submitting } = this.state
+        const { name, slug, description, gradient, sortOrder, error, submitting } = this.state
         const { onCancel } = this.props
 
         return (
@@ -124,6 +142,28 @@ class CategoryForm extends Component<CategoryFormProps, CategoryFormState> {
                         onChange={this.handleDescriptionChange}
                         rows={3}
                     />
+                </div>
+
+                <div className="mt-5 space-y-2">
+                    <Label>Кавер</Label>
+                    <div className="grid grid-cols-3 gap-2 sm:grid-cols-6">
+                        {CATEGORY_GRADIENTS.map((item) => (
+                            <button
+                                key={item}
+                                type="button"
+                                onClick={() => this.handleGradient(item)}
+                                aria-pressed={gradient === item}
+                                aria-label={`Кавер ${item}`}
+                                className={cn(
+                                    'relative h-10 overflow-hidden rounded-lg bg-gradient-to-br transition-all',
+                                    item,
+                                    gradient === item
+                                        ? 'ring-2 ring-brand ring-offset-2 ring-offset-background'
+                                        : 'opacity-75 hover:opacity-100',
+                                )}
+                            />
+                        ))}
+                    </div>
                 </div>
 
                 <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">

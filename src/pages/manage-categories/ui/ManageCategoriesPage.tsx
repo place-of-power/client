@@ -21,6 +21,7 @@ interface Subcategory {
 interface ManageCategoriesPageState {
     categories: Category[]
     subOrder: Record<string, Subcategory[]>
+    covers: Record<string, string>
     loading: boolean
     creating: boolean
     addingSub: { categorySlug: string } | null
@@ -48,6 +49,7 @@ class ManageCategoriesPage extends Component<Record<string, never>, ManageCatego
     state: ManageCategoriesPageState = {
         categories: [],
         subOrder: {},
+        covers: {},
         loading: true,
         creating: false,
         addingSub: null,
@@ -122,8 +124,11 @@ class ManageCategoriesPage extends Component<Record<string, never>, ManageCatego
         this.setState({ creating: false })
     }
 
-    handleCreated = () => {
-        this.setState({ creating: false })
+    handleCreated = (category: Category, cover?: string) => {
+        this.setState((state) => ({
+            creating: false,
+            covers: cover && category.slug ? { ...state.covers, [category.slug]: cover } : state.covers,
+        }))
         void this.load()
     }
 
@@ -238,6 +243,7 @@ class ManageCategoriesPage extends Component<Record<string, never>, ManageCatego
         const {
             categories,
             subOrder,
+            covers,
             loading,
             creating,
             addingSub,
@@ -319,6 +325,14 @@ class ManageCategoriesPage extends Component<Record<string, never>, ManageCatego
                                         <GripVertical className="size-5" />
                                     </span>
                                     <div className="min-w-0 flex-1">
+                                        {covers[category.slug] ? (
+                                            <span
+                                                className={cn(
+                                                    'mb-2 block h-8 w-20 rounded-md bg-gradient-to-br',
+                                                    covers[category.slug],
+                                                )}
+                                            />
+                                        ) : null}
                                         <div className="flex items-baseline gap-2">
                                             <span className="truncate text-sm font-medium text-foreground">
                                                 {category.name}

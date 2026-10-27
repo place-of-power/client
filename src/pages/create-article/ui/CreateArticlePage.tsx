@@ -23,6 +23,7 @@ import {
     Trash2,
     Type,
     Wand2,
+    X,
 } from 'lucide-react'
 import type { BlogCategory } from '@/shared/api/mock/blog-categories'
 import { blogCategories } from '@/shared/api/mock/blog-categories'
@@ -174,6 +175,21 @@ class CreateArticlePage extends Component<Record<string, never>, CreateState> {
     }
 
     handleSubcategory = (value: string) => this.update('subcategorySlug', value)
+
+    addTag = () => {
+        const tags = this.tagsList()
+        const value = this.state.tagsInput.trim()
+
+        if (!value) return
+
+        const joined = [...new Set([...tags, ...value.split(',').map((t) => t.trim()).filter(Boolean)])]
+
+        this.update('tagsInput', joined.join(', '))
+    }
+
+    removeTag = (tag: string) => {
+        this.update('tagsInput', this.tagsList().filter((t) => t !== tag).join(', '))
+    }
 
     private updateBlock(index: number, patch: Partial<ContentBlock>) {
         const blocks = this.state.blocks.map((b, i) =>
@@ -679,17 +695,46 @@ class CreateArticlePage extends Component<Record<string, never>, CreateState> {
                                 <section className="rounded-2xl border bg-card p-6">
                                     <h2 className="text-lg font-bold tracking-tight">Теги</h2>
                                     <div className="mt-4 space-y-3">
-                                        <Input
-                                            value={state.tagsInput}
-                                            onChange={this.handleTags}
-                                            placeholder="JavaScript, Замыкания, Основы"
-                                            aria-label="Теги через запятую"
-                                        />
+                                        <div className="flex items-center gap-2">
+                                            <div className="relative flex-1">
+                                                <Input
+                                                    value={state.tagsInput}
+                                                    onChange={this.handleTags}
+                                                    onKeyDown={(e) => {
+                                                        if (e.key === 'Enter') {
+                                                            e.preventDefault()
+                                                            this.addTag()
+                                                        }
+                                                    }}
+                                                    placeholder="JavaScript, Замыкания, Основы"
+                                                    aria-label="Введите тег"
+                                                    className="pr-10"
+                                                />
+                                                <Button
+                                                    type="button"
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    onClick={this.addTag}
+                                                    aria-label="Добавить тег"
+                                                    className="absolute top-1/2 right-1 -translate-y-1/2"
+                                                >
+                                                    <Plus className="size-4" />
+                                                </Button>
+                                            </div>
+                                        </div>
                                         {this.tagsList().length > 0 ? (
                                             <div className="flex flex-wrap gap-1.5">
                                                 {this.tagsList().map((tag) => (
-                                                    <Badge key={tag} variant="secondary" className="font-normal">
+                                                    <Badge key={tag} variant="secondary" className="gap-1 pr-1 font-normal">
                                                         #{tag}
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => this.removeTag(tag)}
+                                                            aria-label={`Удалить тег ${tag}`}
+                                                            className="-mr-0.5 grid size-4 cursor-pointer place-items-center rounded-full text-muted-foreground transition-colors hover:bg-muted-foreground/15 hover:text-foreground"
+                                                        >
+                                                            <X className="size-3" />
+                                                        </button>
                                                     </Badge>
                                                 ))}
                                             </div>

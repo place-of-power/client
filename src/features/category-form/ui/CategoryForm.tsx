@@ -89,7 +89,7 @@ class CategoryForm extends Component<CategoryFormProps, CategoryFormState> {
 
         return (
             <form onSubmit={this.handleSubmit}>
-                <div className="max-w-2xl rounded-2xl border bg-card p-6">
+                <div className="max-w-2xl bg-card p-6">
                     <div className="space-y-2">
                         <Label htmlFor="category-form-name">Название</Label>
                         <Input

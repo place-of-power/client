@@ -265,7 +265,7 @@ class ManageCategoriesPage extends Component<Record<string, never>, ManageCatego
                     </Link>
                     <Button
                         onClick={this.handleOpenCreate}
-                        className="h-10 rounded-full bg-brand px-5 text-brand-foreground hover:opacity-90"
+                        className="h-10 cursor-pointer rounded-full bg-brand px-5 text-brand-foreground hover:opacity-90"
                     >
                         <Plus className="size-4" /> Добавить категорию
                     </Button>
@@ -300,7 +300,7 @@ class ManageCategoriesPage extends Component<Record<string, never>, ManageCatego
                                     </span>
                                     <div className="min-w-0 flex-1">
                                         <div className="flex items-baseline gap-2">
-                                            <span className="truncate text-sm font-medium">
+                                            <span className="truncate text-sm font-medium text-foreground">
                                                 {category.name}
                                             </span>
                                             <span className="ml-auto hidden text-xs text-muted-foreground sm:inline">
@@ -319,20 +319,20 @@ class ManageCategoriesPage extends Component<Record<string, never>, ManageCatego
                                                     onDragOver={this.handleDragOver}
                                                     onDrop={this.handleSubDrop(category.slug, subIndex)}
                                                     onDragEnd={this.handleSubDragEnd}
-                                                    className={cn(
-                                                        'flex items-center gap-2 border-l-2 border-border pl-3 text-[0.7rem] text-muted-foreground',
-                                                        dragSub?.categorySlug === category.slug &&
-                                                            dragSub.index === subIndex &&
-                                                            'opacity-50',
-                                                    )}
-                                                >
-                                                    <span className="cursor-grab">
-                                                        <GripVertical className="size-3" />
-                                                    </span>
-                                                    <span className="size-1 rounded-full bg-current" />
-                                                    <span className="min-w-0 flex-1 truncate">
-                                                        {subcategory.name}
-                                                    </span>
+className={cn(
+                                            'flex items-center gap-2 border-l-2 border-border pl-3 text-[0.7rem]',
+                                            dragSub?.categorySlug === category.slug &&
+                                                dragSub.index === subIndex &&
+                                                'opacity-50',
+                                        )}
+                                    >
+                                        <span className="cursor-grab text-muted-foreground">
+                                            <GripVertical className="size-3" />
+                                        </span>
+                                        <span className="size-1 rounded-full bg-current text-muted-foreground" />
+                                        <span className="min-w-0 flex-1 truncate text-foreground">
+                                            {subcategory.name}
+                                        </span>
                                                     <button
                                                         type="button"
                                                         onClick={this.handleSubDelete(

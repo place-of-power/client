@@ -25,7 +25,7 @@ class Footer extends Component {
                                 <Terminal className="size-5" />
                             </span>
                             <div>
-                                <p className="text-base font-bold tracking-tight">Place of Power</p>
+                                <p className="text-base font-bold tracking-tight text-foreground">Place of Power</p>
                                 <p className="text-xs text-muted-foreground">
                                     IT · AI · Code — обучающие статьи о технологиях
                                 </p>

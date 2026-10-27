@@ -3,7 +3,6 @@ import type { DragEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowLeft, ChevronDown, ChevronUp, GripVertical, Plus, Trash2 } from 'lucide-react'
 import { fetchCategories } from '@/shared/api'
-import { blogCategories } from '@/shared/api/mock/blog-categories'
 import { paths } from '@/shared/config'
 import { deleteCategoryById, reorderCategoriesById } from '@/shared/lib'
 import type { Category } from '@/shared/model/category'
@@ -23,6 +22,18 @@ interface ManageCategoriesPageState {
     deletingBusy: boolean
     error: string
     dragIndex: number | null
+}
+
+// shortcut: подкатегорий в API пока нет — показываем стабильное случайное число по slug
+function mockSubcategories(slug: string): { name: string; slug: string }[] {
+    const seed = [...slug].reduce((total, char) => total + char.charCodeAt(0), 0)
+    const count = 2 + (seed % 4)
+    const base = ['Основы', 'Практикум', 'Инструменты', 'Продвинутый', 'Кейсы']
+
+    return Array.from({ length: count }, (_, index) => ({
+        name: `${base[(seed + index) % base.length]} ${index + 1}`,
+        slug: `${slug}-${index + 1}`,
+    }))
 }
 
 class ManageCategoriesPage extends Component<Record<string, never>, ManageCategoriesPageState> {
@@ -217,22 +228,20 @@ class ManageCategoriesPage extends Component<Record<string, never>, ManageCatego
 
                 {!loading ? (
                     <ul className="mt-6 overflow-hidden rounded-2xl border bg-card">
-                        {categories.map((category, index) => {
-                            const profile = blogCategories.find(
-                                (item) => item.slug === category.slug,
-                            )
+                        {categories.map((category) => {
+                            const subcategories = mockSubcategories(category.slug)
 
                             return (
                                 <li
                                     key={category.id}
                                     draggable
-                                    onDragStart={this.handleDragStart(index)}
+                                    onDragStart={this.handleDragStart(categories.indexOf(category))}
                                     onDragOver={this.handleDragOver}
-                                    onDrop={this.handleDrop(index)}
+                                    onDrop={this.handleDrop(categories.indexOf(category))}
                                     onDragEnd={this.handleDragEnd}
                                     className={cn(
                                         'flex items-start gap-3 border-b p-4 last:border-b-0',
-                                        dragIndex === index && 'opacity-50',
+                                        dragIndex === categories.indexOf(category) && 'opacity-50',
                                     )}
                                 >
                                     <span className="mt-1 cursor-grab text-muted-foreground active:cursor-grabbing">
@@ -247,24 +256,22 @@ class ManageCategoriesPage extends Component<Record<string, never>, ManageCatego
                                                 /{category.slug}
                                             </span>
                                         </div>
-                                        {profile && profile.subcategories.length > 0 ? (
-                                            <ul className="mt-1.5 flex flex-wrap gap-1">
-                                                {profile.subcategories.map((subcategory) => (
-                                                    <li
-                                                        key={subcategory.slug}
-                                                        className="rounded-full bg-muted px-2 py-0.5 text-[0.65rem] font-medium text-muted-foreground"
-                                                    >
-                                                        {subcategory.name}
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        ) : null}
+                                        <ul className="mt-1.5 flex flex-wrap gap-1">
+                                            {subcategories.map((subcategory) => (
+                                                <li
+                                                    key={subcategory.slug}
+                                                    className="rounded-full bg-muted px-2 py-0.5 text-[0.65rem] font-medium text-muted-foreground"
+                                                >
+                                                    {subcategory.name}
+                                                </li>
+                                            ))}
+                                        </ul>
                                     </div>
                                     <div className="flex items-center gap-1">
-                                        {moveUpButton(category, index)}
-                                        {moveDownButton(category, index)}
+                                        {moveUpButton(category, categories.indexOf(category))}
+                                        {moveDownButton(category, categories.indexOf(category))}
                                         <span className="mx-1 h-5 w-px bg-border" />
-                                        {deleteButton(category, index)}
+                                        {deleteButton(category, categories.indexOf(category))}
                                     </div>
                                 </li>
                             )

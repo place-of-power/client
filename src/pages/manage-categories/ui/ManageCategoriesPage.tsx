@@ -373,7 +373,7 @@ className={cn(
                                             size="icon"
                                             onClick={this.handleOpenAddSub(category.slug)}
                                             aria-label={`Добавить подкатегорию в: ${category.name}`}
-                                            className="size-8 cursor-pointer rounded-full text-muted-foreground hover:bg-accent hover:text-foreground"
+                                            className="size-8 cursor-pointer rounded-full text-brand hover:bg-brand/10"
                                         >
                                             <Plus className="size-4" />
                                         </Button>

@@ -114,14 +114,6 @@ class Footer extends Component {
                                 </li>
                                 <li>
                                     <Link
-                                        to={paths.createCategory}
-                                        className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-                                    >
-                                        Создать категорию
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link
                                         to={paths.manageCategories}
                                         className="text-sm text-muted-foreground transition-colors hover:text-foreground"
                                     >

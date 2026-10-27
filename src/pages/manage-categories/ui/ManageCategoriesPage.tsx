@@ -6,8 +6,9 @@ import { fetchCategories } from '@/shared/api'
 import { paths } from '@/shared/config'
 import { deleteCategoryById, reorderCategoriesById } from '@/shared/lib'
 import type { Category } from '@/shared/model/category'
+import { CategoryForm } from '@/features/category-form'
 import { ConfirmDialog } from '@/shared/ui'
-import { Button } from '@/shared/ui/kit'
+import { Button, Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/shared/ui/kit'
 import { cn } from '@/shared/lib/cn'
 
 interface Subcategory {
@@ -19,6 +20,7 @@ interface ManageCategoriesPageState {
     categories: Category[]
     subOrder: Record<string, Subcategory[]>
     loading: boolean
+    creating: boolean
     deleting: Category | null
     deletingSub: { categorySlug: string; name: string; index: number } | null
     deletingBusy: boolean
@@ -44,6 +46,7 @@ class ManageCategoriesPage extends Component<Record<string, never>, ManageCatego
         categories: [],
         subOrder: {},
         loading: true,
+        creating: false,
         deleting: null,
         deletingSub: null,
         deletingBusy: false,
@@ -105,6 +108,19 @@ class ManageCategoriesPage extends Component<Record<string, never>, ManageCatego
         if (!this.state.deletingBusy) {
             this.setState({ deleting: null, deletingSub: null })
         }
+    }
+
+    handleOpenCreate = () => {
+        this.setState({ creating: true })
+    }
+
+    handleCloseCreate = () => {
+        this.setState({ creating: false })
+    }
+
+    handleCreated = () => {
+        this.setState({ creating: false })
+        void this.load()
     }
 
     handleSubDelete = (categorySlug: string, index: number) => () => {
@@ -203,6 +219,7 @@ class ManageCategoriesPage extends Component<Record<string, never>, ManageCatego
             categories,
             subOrder,
             loading,
+            creating,
             deleting,
             deletingSub,
             deletingBusy,
@@ -245,10 +262,11 @@ class ManageCategoriesPage extends Component<Record<string, never>, ManageCatego
                     >
                         <ArrowLeft className="size-4" /> К категориям
                     </Link>
-                    <Button asChild className="h-10 rounded-full bg-brand px-5 text-brand-foreground hover:opacity-90">
-                        <Link to={paths.createCategory}>
-                            <Plus className="size-4" /> Добавить категорию
-                        </Link>
+                    <Button
+                        onClick={this.handleOpenCreate}
+                        className="h-10 rounded-full bg-brand px-5 text-brand-foreground hover:opacity-90"
+                    >
+                        <Plus className="size-4" /> Добавить категорию
                     </Button>
                 </div>
 
@@ -354,6 +372,21 @@ class ManageCategoriesPage extends Component<Record<string, never>, ManageCatego
                             возможности восстановления.</>
                     )}
                 </ConfirmDialog>
+
+                <Sheet open={creating} onOpenChange={this.handleCloseCreate}>
+                    <SheetContent className="w-full sm:max-w-md">
+                        <SheetHeader>
+                            <SheetTitle>Новая категория</SheetTitle>
+                            <SheetDescription>
+                                Slug можно оставить пустым — он сгенерируется из названия. Порядок
+                                задаёт позицию в каталоге.
+                            </SheetDescription>
+                        </SheetHeader>
+                        <div className="overflow-y-auto px-6 pb-6">
+                            <CategoryForm onCreated={this.handleCreated} />
+                        </div>
+                    </SheetContent>
+                </Sheet>
             </main>
         )
     }

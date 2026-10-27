@@ -15,17 +15,24 @@ interface RowAction {
     index: number
 }
 
+interface Subcategory {
+    name: string
+    slug: string
+}
+
 interface ManageCategoriesPageState {
     categories: Category[]
+    subOrder: Record<string, Subcategory[]>
     loading: boolean
     deleting: Category | null
     deletingBusy: boolean
     error: string
     dragIndex: number | null
+    dragSub: { categorySlug: string; index: number } | null
 }
 
 // shortcut: подкатегорий в API пока нет — показываем стабильное случайное число по slug
-function mockSubcategories(slug: string): { name: string; slug: string }[] {
+function mockSubcategories(slug: string): Subcategory[] {
     const seed = [...slug].reduce((total, char) => total + char.charCodeAt(0), 0)
     const count = 2 + (seed % 4)
     const base = ['Основы', 'Практикум', 'Инструменты', 'Продвинутый', 'Кейсы']
@@ -39,11 +46,13 @@ function mockSubcategories(slug: string): { name: string; slug: string }[] {
 class ManageCategoriesPage extends Component<Record<string, never>, ManageCategoriesPageState> {
     state: ManageCategoriesPageState = {
         categories: [],
+        subOrder: {},
         loading: true,
         deleting: null,
         deletingBusy: false,
         error: '',
         dragIndex: null,
+        dragSub: null,
     }
 
     componentDidMount() {
@@ -53,8 +62,13 @@ class ManageCategoriesPage extends Component<Record<string, never>, ManageCatego
     async load() {
         try {
             const categories = await fetchCategories()
+            const subOrder: Record<string, Subcategory[]> = {}
 
-            this.setState({ categories, loading: false })
+            for (const category of categories) {
+                subOrder[category.slug] = mockSubcategories(category.slug)
+            }
+
+            this.setState({ categories, subOrder, loading: false })
         } catch {
             this.setState({ loading: false })
         }
@@ -141,6 +155,33 @@ class ManageCategoriesPage extends Component<Record<string, never>, ManageCatego
         this.setState({ dragIndex: null })
     }
 
+    handleSubDragStart = (categorySlug: string, index: number) => () => {
+        this.setState({ dragSub: { categorySlug, index } })
+    }
+
+    handleSubDrop = (categorySlug: string, targetIndex: number) => () => {
+        const { subOrder, dragSub } = this.state
+
+        if (!dragSub || dragSub.categorySlug !== categorySlug || dragSub.index === targetIndex) {
+            this.setState({ dragSub: null })
+
+            return
+        }
+
+        const next = [...(subOrder[categorySlug] ?? [])]
+        const [moved] = next.splice(dragSub.index, 1)
+        next.splice(targetIndex, 0, moved)
+
+        this.setState({
+            subOrder: { ...subOrder, [categorySlug]: next },
+            dragSub: null,
+        })
+    }
+
+    handleSubDragEnd = () => {
+        this.setState({ dragSub: null })
+    }
+
     async persistOrder(next: Category[]) {
         const items = next.map((category, index) => ({ id: category.id, sortOrder: index }))
         const result = await reorderCategoriesById(items)
@@ -151,7 +192,16 @@ class ManageCategoriesPage extends Component<Record<string, never>, ManageCatego
     }
 
     render() {
-        const { categories, loading, deleting, deletingBusy, error, dragIndex } = this.state
+        const {
+            categories,
+            subOrder,
+            loading,
+            deleting,
+            deletingBusy,
+            error,
+            dragIndex,
+            dragSub,
+        } = this.state
 
         const moveUpButton = (category: Category, index: number) => (
             <Button
@@ -229,7 +279,7 @@ class ManageCategoriesPage extends Component<Record<string, never>, ManageCatego
                 {!loading ? (
                     <ul className="mt-6 overflow-hidden rounded-2xl border bg-card">
                         {categories.map((category) => {
-                            const subcategories = mockSubcategories(category.slug)
+                            const subcategories = subOrder[category.slug] ?? []
 
                             return (
                                 <li
@@ -257,11 +307,27 @@ class ManageCategoriesPage extends Component<Record<string, never>, ManageCatego
                                             </span>
                                         </div>
                                         <ul className="mt-2 space-y-1">
-                                            {subcategories.map((subcategory) => (
+                                            {subcategories.map((subcategory, subIndex) => (
                                                 <li
                                                     key={subcategory.slug}
-                                                    className="flex items-center gap-2 border-l-2 border-border pl-3 text-[0.7rem] text-muted-foreground"
+                                                    draggable
+                                                    onDragStart={this.handleSubDragStart(
+                                                        category.slug,
+                                                        subIndex,
+                                                    )}
+                                                    onDragOver={this.handleDragOver}
+                                                    onDrop={this.handleSubDrop(category.slug, subIndex)}
+                                                    onDragEnd={this.handleSubDragEnd}
+                                                    className={cn(
+                                                        'flex items-center gap-2 border-l-2 border-border pl-3 text-[0.7rem] text-muted-foreground',
+                                                        dragSub?.categorySlug === category.slug &&
+                                                            dragSub.index === subIndex &&
+                                                            'opacity-50',
+                                                    )}
                                                 >
+                                                    <span className="cursor-grab">
+                                                        <GripVertical className="size-3" />
+                                                    </span>
                                                     <span className="size-1 rounded-full bg-current" />
                                                     {subcategory.name}
                                                 </li>

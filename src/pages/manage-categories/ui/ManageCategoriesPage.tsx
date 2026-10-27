@@ -1,7 +1,7 @@
 import { Component } from 'react'
 import type { DragEvent } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowLeft, ChevronDown, ChevronUp, GripVertical, Plus, Trash2 } from 'lucide-react'
+import { ArrowLeft, GripVertical, Plus, Trash2 } from 'lucide-react'
 import { fetchCategories } from '@/shared/api'
 import { paths } from '@/shared/config'
 import { deleteCategoryById, reorderCategoriesById } from '@/shared/lib'
@@ -9,11 +9,6 @@ import type { Category } from '@/shared/model/category'
 import { ConfirmDialog } from '@/shared/ui'
 import { Button } from '@/shared/ui/kit'
 import { cn } from '@/shared/lib/cn'
-
-interface RowAction {
-    kind: 'moveUp' | 'moveDown' | 'delete'
-    index: number
-}
 
 interface Subcategory {
     name: string
@@ -74,28 +69,10 @@ class ManageCategoriesPage extends Component<Record<string, never>, ManageCatego
         }
     }
 
-    handleAction = (index: number, kind: RowAction['kind']) => {
+    handleDelete = (index: number) => {
         const { categories } = this.state
 
-        if (kind === 'delete') {
-            this.setState({ deleting: categories[index] ?? null, error: '' })
-
-            return
-        }
-
-        const next = [...categories]
-        const swapWith = kind === 'moveUp' ? index - 1 : index + 1
-
-        if (swapWith < 0 || swapWith >= next.length) {
-            return
-        }
-
-        const tmp = next[index]
-        next[index] = next[swapWith]
-        next[swapWith] = tmp
-
-        this.setState({ categories: next, error: '' })
-        void this.persistOrder(next)
+        this.setState({ deleting: categories[index] ?? null, error: '' })
     }
 
     handleConfirmDelete = async () => {
@@ -203,37 +180,11 @@ class ManageCategoriesPage extends Component<Record<string, never>, ManageCatego
             dragSub,
         } = this.state
 
-        const moveUpButton = (category: Category, index: number) => (
-            <Button
-                variant="ghost"
-                size="icon"
-                disabled={index === 0}
-                onClick={() => this.handleAction(index, 'moveUp')}
-                aria-label={`Переместить вверх: ${category.name}`}
-                className="size-8 rounded-full"
-            >
-                <ChevronUp className="size-4" />
-            </Button>
-        )
-
-        const moveDownButton = (category: Category, index: number) => (
-            <Button
-                variant="ghost"
-                size="icon"
-                disabled={index === categories.length - 1}
-                onClick={() => this.handleAction(index, 'moveDown')}
-                aria-label={`Переместить вниз: ${category.name}`}
-                className="size-8 rounded-full"
-            >
-                <ChevronDown className="size-4" />
-            </Button>
-        )
-
         const deleteButton = (category: Category, index: number) => (
             <Button
                 variant="ghost"
                 size="icon"
-                onClick={() => this.handleAction(index, 'delete')}
+                onClick={() => this.handleDelete(index)}
                 aria-label={`Удалить: ${category.name}`}
                 className="size-8 rounded-full text-destructive hover:bg-destructive/10 hover:text-destructive"
             >
@@ -251,7 +202,7 @@ class ManageCategoriesPage extends Component<Record<string, never>, ManageCatego
                         Управление категориями
                     </h1>
                     <p className="mt-3 max-w-2xl text-muted-foreground">
-                        Переставляйте категории стрелками или перетаскиванием. Порядок сохраняется
+                        Переставляйте категории перетаскиванием. Порядок сохраняется
                         на&nbsp;сервере.
                     </p>
                 </header>
@@ -334,10 +285,7 @@ class ManageCategoriesPage extends Component<Record<string, never>, ManageCatego
                                             ))}
                                         </ul>
                                     </div>
-                                    <div className="flex items-center gap-1">
-                                        {moveUpButton(category, categories.indexOf(category))}
-                                        {moveDownButton(category, categories.indexOf(category))}
-                                        <span className="mx-1 h-5 w-px bg-border" />
+                                    <div className="flex items-center">
                                         {deleteButton(category, categories.indexOf(category))}
                                     </div>
                                 </li>

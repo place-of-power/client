@@ -2,15 +2,17 @@ import { Component } from 'react'
 import type { ChangeEvent, SubmitEvent } from 'react'
 import { createCategoryById, slugify } from '@/shared/lib'
 import type { Category } from '@/shared/model'
-import { Button, Input, Label } from '@/shared/ui/kit'
+import { Button, Input, Label, Textarea } from '@/shared/ui/kit'
 
 interface CategoryFormProps {
     onCreated: (category: Category) => void
+    onCancel?: () => void
 }
 
 interface CategoryFormState {
     name: string
     slug: string
+    description: string
     sortOrder: string
     error: string
     slugEdited: boolean
@@ -21,6 +23,7 @@ class CategoryForm extends Component<CategoryFormProps, CategoryFormState> {
     state: CategoryFormState = {
         name: '',
         slug: '',
+        description: '',
         sortOrder: '',
         error: '',
         slugEdited: false,
@@ -42,6 +45,10 @@ class CategoryForm extends Component<CategoryFormProps, CategoryFormState> {
 
     handleSortOrderChange = (event: ChangeEvent<HTMLInputElement>) => {
         this.setState({ sortOrder: event.target.value })
+    }
+
+    handleDescriptionChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+        this.setState({ description: event.target.value })
     }
 
     handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
@@ -71,7 +78,7 @@ class CategoryForm extends Component<CategoryFormProps, CategoryFormState> {
             }
 
             this.props.onCreated(result.category)
-            this.setState({ name: '', slug: '', sortOrder: '', error: '', slugEdited: false })
+            this.setState({ name: '', slug: '', description: '', sortOrder: '', error: '', slugEdited: false })
         } catch (error) {
             this.setState({
                 error:
@@ -85,7 +92,8 @@ class CategoryForm extends Component<CategoryFormProps, CategoryFormState> {
     }
 
     render() {
-        const { name, slug, sortOrder, error, submitting } = this.state
+        const { name, slug, description, sortOrder, error, submitting } = this.state
+        const { onCancel } = this.props
 
         return (
             <form onSubmit={this.handleSubmit} className="w-full">
@@ -98,6 +106,17 @@ class CategoryForm extends Component<CategoryFormProps, CategoryFormState> {
                             value={name}
                             placeholder="Например, Go"
                             onChange={this.handleNameChange}
+                        />
+                    </div>
+
+                    <div className="mt-5 space-y-2">
+                        <Label htmlFor="category-form-description">Описание</Label>
+                        <Textarea
+                            id="category-form-description"
+                            value={description}
+                            placeholder="Краткое содержание категории"
+                            onChange={this.handleDescriptionChange}
+                            rows={3}
                         />
                     </div>
 
@@ -132,7 +151,17 @@ class CategoryForm extends Component<CategoryFormProps, CategoryFormState> {
                         </p>
                     ) : null}
 
-                    <div className="mt-5 flex justify-end">
+                    <div className="mt-5 flex justify-end gap-2">
+                        {onCancel ? (
+                            <Button
+                                type="button"
+                                variant="ghost"
+                                onClick={onCancel}
+                                className="h-10 cursor-pointer rounded-full px-5"
+                            >
+                                Отмена
+                            </Button>
+                        ) : null}
                         <Button
                             type="submit"
                             disabled={submitting}

@@ -8,13 +8,14 @@ import { deleteCategoryById, reorderCategoriesById } from '@/shared/lib'
 import type { Category } from '@/shared/model/category'
 import { CategoryForm } from '@/features/category-form'
 import { ConfirmDialog } from '@/shared/ui'
-import { Button, Input, Label } from '@/shared/ui/kit'
+import { Button, Input, Label, Textarea } from '@/shared/ui/kit'
 import { cn } from '@/shared/lib/cn'
 import './ManageCategoriesPage.css'
 
 interface Subcategory {
     name: string
     slug: string
+    description?: string
 }
 
 interface ManageCategoriesPageState {
@@ -134,10 +135,10 @@ class ManageCategoriesPage extends Component<Record<string, never>, ManageCatego
         this.setState({ addingSub: null })
     }
 
-    handleSubAdded = (categorySlug: string, name: string) => {
+    handleSubAdded = (categorySlug: string, name: string, description: string) => {
         const { subOrder } = this.state
         const slug = `${categorySlug}-${Date.now()}`
-        const next = [...(subOrder[categorySlug] ?? []), { name, slug }]
+        const next = [...(subOrder[categorySlug] ?? []), { name, slug, description }]
 
         this.setState({ subOrder: { ...subOrder, [categorySlug]: next }, addingSub: null })
     }
@@ -338,20 +339,27 @@ class ManageCategoriesPage extends Component<Record<string, never>, ManageCatego
                                                     onDragOver={this.handleDragOver}
                                                     onDrop={this.handleSubDrop(category.slug, subIndex)}
                                                     onDragEnd={this.handleSubDragEnd}
-className={cn(
-                                            'flex items-center gap-2 border-l-2 border-border pl-3 text-[0.7rem]',
-                                            dragSub?.categorySlug === category.slug &&
-                                                dragSub.index === subIndex &&
-                                                'opacity-50',
-                                        )}
-                                    >
-                                        <span className="cursor-grab text-muted-foreground">
-                                            <GripVertical className="size-3" />
-                                        </span>
-                                        <span className="size-1 rounded-full bg-current text-muted-foreground" />
-                                        <span className="min-w-0 flex-1 truncate text-foreground">
-                                            {subcategory.name}
-                                        </span>
+                                                    className={cn(
+                                                        'flex items-center gap-2 border-l-2 border-border pl-3 text-[0.7rem]',
+                                                        dragSub?.categorySlug === category.slug &&
+                                                            dragSub.index === subIndex &&
+                                                            'opacity-50',
+                                                    )}
+                                                >
+                                                    <span className="cursor-grab text-muted-foreground">
+                                                        <GripVertical className="size-3" />
+                                                    </span>
+                                                    <span className="size-1 rounded-full bg-current text-muted-foreground" />
+                                                    <div className="min-w-0 flex-1">
+                                                        <span className="block truncate text-foreground">
+                                                            {subcategory.name}
+                                                        </span>
+                                                        {subcategory.description ? (
+                                                            <span className="block truncate text-muted-foreground">
+                                                                {subcategory.description}
+                                                            </span>
+                                                        ) : null}
+                                                    </div>
                                                     <button
                                                         type="button"
                                                         onClick={this.handleSubDelete(
@@ -411,7 +419,7 @@ className={cn(
                                 Slug можно оставить пустым — он сгенерируется из названия. Порядок
                                 задаёт позицию в каталоге.
                             </p>
-                            <CategoryForm onCreated={this.handleCreated} />
+                            <CategoryForm onCreated={this.handleCreated} onCancel={this.handleCloseCreate} />
                         </div>
                     </div>
                 ) : null}
@@ -438,19 +446,24 @@ interface AddSubcategoryDialogProps {
     categorySlug: string
     categoryName: string
     onClose: () => void
-    onAdd: (categorySlug: string, name: string) => void
+    onAdd: (categorySlug: string, name: string, description: string) => void
 }
 
 interface AddSubcategoryDialogState {
     name: string
+    description: string
     error: string
 }
 
 class AddSubcategoryDialog extends Component<AddSubcategoryDialogProps, AddSubcategoryDialogState> {
-    state: AddSubcategoryDialogState = { name: '', error: '' }
+    state: AddSubcategoryDialogState = { name: '', description: '', error: '' }
 
     handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({ name: event.target.value })
+    }
+
+    handleDescriptionChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+        this.setState({ description: event.target.value })
     }
 
     handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -464,12 +477,12 @@ class AddSubcategoryDialog extends Component<AddSubcategoryDialogProps, AddSubca
             return
         }
 
-        this.props.onAdd(this.props.categorySlug, name)
+        this.props.onAdd(this.props.categorySlug, name, this.state.description.trim())
     }
 
     render() {
         const { categoryName, onClose } = this.props
-        const { name, error } = this.state
+        const { name, description, error } = this.state
 
         return (
             <div className="create-dialog" role="dialog" aria-modal="true" aria-label="Новая подкатегория">
@@ -489,6 +502,16 @@ class AddSubcategoryDialog extends Component<AddSubcategoryDialogProps, AddSubca
                                 placeholder="Например, TypeScript"
                                 onChange={this.handleChange}
                                 autoFocus
+                            />
+                        </div>
+                        <div className="mt-4 space-y-2">
+                            <Label htmlFor="subcategory-form-description">Описание</Label>
+                            <Textarea
+                                id="subcategory-form-description"
+                                value={description}
+                                placeholder="Краткое содержание подкатегории"
+                                onChange={this.handleDescriptionChange}
+                                rows={3}
                             />
                         </div>
                         {error ? (

@@ -256,12 +256,13 @@ class ManageCategoriesPage extends Component<Record<string, never>, ManageCatego
                                                 /{category.slug}
                                             </span>
                                         </div>
-                                        <ul className="mt-1.5 flex flex-wrap gap-1">
+                                        <ul className="mt-2 space-y-1">
                                             {subcategories.map((subcategory) => (
                                                 <li
                                                     key={subcategory.slug}
-                                                    className="rounded-full bg-muted px-2 py-0.5 text-[0.65rem] font-medium text-muted-foreground"
+                                                    className="flex items-center gap-2 border-l-2 border-border pl-3 text-[0.7rem] text-muted-foreground"
                                                 >
+                                                    <span className="size-1 rounded-full bg-current" />
                                                     {subcategory.name}
                                                 </li>
                                             ))}

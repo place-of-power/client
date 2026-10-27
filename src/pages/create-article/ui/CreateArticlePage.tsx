@@ -181,7 +181,7 @@ class CreateArticlePage extends Component<Record<string, never>, CreateState> {
         if (!value) return
 
         const incoming = value.split(',').map((t) => t.trim()).filter(Boolean)
-        const merged = [...new Set([...this.state.articleTags, ...incoming])]
+        const merged = [...new Set([...this.state.articleTags, ...incoming])].slice(0, 5)
 
         this.update('articleTags', merged)
         this.update('tagsInput', '')
@@ -694,7 +694,12 @@ class CreateArticlePage extends Component<Record<string, never>, CreateState> {
                                 </section>
 
                                 <section className="rounded-2xl border bg-card p-6">
-                                    <h2 className="text-lg font-bold tracking-tight">Теги</h2>
+                                    <div className="flex items-center justify-between">
+                                        <h2 className="text-lg font-bold tracking-tight">Теги</h2>
+                                        <span className="text-[0.7rem] text-muted-foreground tabular-nums">
+                                            {state.articleTags.length}/5
+                                        </span>
+                                    </div>
                                     <div className="mt-4 space-y-3">
                                         <div className="flex items-center gap-2 rounded-full border bg-background/70 p-1.5 pl-4 shadow-sm backdrop-blur">
                                             <Input

@@ -89,7 +89,6 @@ interface CreateState {
     categorySlug: string
     subcategorySlug: string
     authorName: string
-    authorRole: string
     readTime: number | ''
     tagsInput: string
     gradient: string
@@ -116,7 +115,6 @@ class CreateArticlePage extends Component<Record<string, never>, CreateState> {
         categorySlug: '',
         subcategorySlug: '',
         authorName: '',
-        authorRole: '',
         readTime: '',
         tagsInput: '',
         gradient: GRADIENT_PRESETS[0].value,
@@ -163,7 +161,6 @@ class CreateArticlePage extends Component<Record<string, never>, CreateState> {
     handleTitle = (event: ChangeEvent<HTMLInputElement>) => this.update('title', event.target.value)
     handleExcerpt = (event: ChangeEvent<HTMLTextAreaElement>) => this.update('excerpt', event.target.value)
     handleAuthorName = (event: ChangeEvent<HTMLInputElement>) => this.update('authorName', event.target.value)
-    handleAuthorRole = (event: ChangeEvent<HTMLInputElement>) => this.update('authorRole', event.target.value)
     handleTags = (event: ChangeEvent<HTMLInputElement>) => this.update('tagsInput', event.target.value)
 
     handleReadTime = (event: ChangeEvent<HTMLInputElement>) => {
@@ -219,7 +216,6 @@ class CreateArticlePage extends Component<Record<string, never>, CreateState> {
             categorySlug: '',
             subcategorySlug: '',
             authorName: '',
-            authorRole: '',
             readTime: '',
             tagsInput: '',
             gradient: GRADIENT_PRESETS[0].value,
@@ -397,7 +393,6 @@ class CreateArticlePage extends Component<Record<string, never>, CreateState> {
         const category = this.selectedCategory()
         const tags = this.tagsList()
         const name = state.authorName.trim() || 'Ваше имя'
-        const role = state.authorRole.trim() || 'Автор блога'
         const title = state.title.trim() || 'Заголовок статьи'
         const excerpt = state.excerpt.trim() || 'Краткое описание появится здесь.'
 
@@ -442,7 +437,6 @@ class CreateArticlePage extends Component<Record<string, never>, CreateState> {
                             </span>
                             <div className="min-w-0">
                                 <p className="truncate text-[0.78rem] leading-tight font-medium">{name}</p>
-                                <p className="truncate text-[0.66rem] text-muted-foreground">{role}</p>
                             </div>
                         </div>
                     </div>
@@ -626,16 +620,6 @@ class CreateArticlePage extends Component<Record<string, never>, CreateState> {
                                             {this.renderFieldError(errors.authorName)}
                                         </div>
 
-                                        <div className="space-y-2">
-                                            <Label htmlFor="role">Роль автора</Label>
-                                            <Input
-                                                id="role"
-                                                value={state.authorRole}
-                                                onChange={this.handleAuthorRole}
-                                                placeholder="Например: Backend Engineer"
-                                            />
-                                        </div>
-
                                         <div className="space-y-2 sm:col-span-2">
                                             <Label htmlFor="readTime">Время чтения, минут</Label>
                                             <div className="flex flex-wrap items-center gap-2">
@@ -790,7 +774,10 @@ class CreateArticlePage extends Component<Record<string, never>, CreateState> {
                                     </div>
                                 </section>
 
-                                <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+                                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end">
+                                    <Button type="button" variant="ghost" size="lg" className="h-12 rounded-full" onClick={() => this.resetForm()} disabled={state.submitting}>
+                                        Очистить
+                                    </Button>
                                     <Button type="submit" size="lg" disabled={state.submitting} className="h-12 flex-1 rounded-full bg-brand text-base text-brand-foreground hover:opacity-90 sm:flex-none sm:px-10">
                                         {state.submitting ? (
                                             <>
@@ -801,9 +788,6 @@ class CreateArticlePage extends Component<Record<string, never>, CreateState> {
                                                 <Sparkles className="size-5" /> Опубликовать статью
                                             </>
                                         )}
-                                    </Button>
-                                    <Button type="button" variant="ghost" size="lg" className="h-12 rounded-full" onClick={() => this.resetForm()} disabled={state.submitting}>
-                                        Очистить
                                     </Button>
                                 </div>
                             </div>

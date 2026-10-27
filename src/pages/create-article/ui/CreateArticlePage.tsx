@@ -494,12 +494,7 @@ class CreateArticlePage extends Component<Record<string, never>, CreateState> {
         const errors = state.errors
 
         return (
-            <div className="relative overflow-hidden">
-                <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-72">
-                    <div className="animate-blob absolute top-[-8rem] left-1/4 size-[22rem] rounded-full bg-emerald-500/20 blur-3xl" />
-                    <div className="animate-blob absolute top-[-6rem] right-1/4 size-[20rem] rounded-full bg-teal-500/15 blur-3xl [animation-delay:-5s]" />
-                </div>
-
+            <div className="relative flex-1 overflow-hidden bg-background">
                 <div className="mx-auto w-full max-w-[var(--container)] px-[var(--gutter)] pt-8 pb-20">
                     <nav aria-label="Навигация" className="flex items-center justify-between gap-3">
                         <ol className="flex flex-wrap items-center gap-1.5 text-[0.78rem] text-muted-foreground">

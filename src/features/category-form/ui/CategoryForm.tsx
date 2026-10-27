@@ -88,7 +88,7 @@ class CategoryForm extends Component<CategoryFormProps, CategoryFormState> {
         const { name, slug, sortOrder, error, submitting } = this.state
 
         return (
-            <form onSubmit={this.handleSubmit}>
+            <form onSubmit={this.handleSubmit} className="w-full">
                 <div className="w-full box-border bg-card p-6">
                     <div className="space-y-2">
                         <Label htmlFor="category-form-name">Название</Label>

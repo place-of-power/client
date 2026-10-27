@@ -3,7 +3,6 @@ import type { ChangeEvent, FormEvent } from 'react'
 import { Link } from 'react-router-dom'
 import {
     AlignLeft,
-    ArrowLeft,
     Check,
     ChevronDown,
     ChevronUp,
@@ -496,7 +495,7 @@ class CreateArticlePage extends Component<Record<string, never>, CreateState> {
         return (
             <div className="relative flex-1 overflow-hidden bg-background">
                 <div className="mx-auto w-full max-w-[var(--container)] px-[var(--gutter)] pt-8 pb-20">
-                    <nav aria-label="Навигация" className="flex items-center justify-between gap-3">
+                    <nav aria-label="Навигация">
                         <ol className="flex flex-wrap items-center gap-1.5 text-[0.78rem] text-muted-foreground">
                             <li>
                                 <Link to={paths.home} className="hover:text-foreground">
@@ -508,11 +507,6 @@ class CreateArticlePage extends Component<Record<string, never>, CreateState> {
                                 Новая статья
                             </li>
                         </ol>
-                        <Button asChild variant="outline" size="sm" className="h-8 rounded-full">
-                            <Link to={paths.categories}>
-                                <ArrowLeft className="size-3.5" /> Все статьи
-                            </Link>
-                        </Button>
                     </nav>
 
                     <header className="mx-auto mt-8 max-w-3xl text-center">

@@ -253,7 +253,7 @@ class ManageCategoriesPage extends Component<Record<string, never>, ManageCatego
                                             <span className="truncate text-sm font-medium">
                                                 {category.name}
                                             </span>
-                                            <span className="hidden text-xs text-muted-foreground sm:inline">
+                                            <span className="ml-auto hidden text-xs text-muted-foreground sm:inline">
                                                 /{category.slug}
                                             </span>
                                         </div>

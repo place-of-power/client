@@ -33,6 +33,11 @@ interface CreatedArticleDto {
 }
 
 function toPreviewFromRecent(dto: RecentArticleDto): ArticlePreview {
+    // shortcut: тегов в API нет — берём по слову из заголовка
+    const tagKeywords = ['Net', 'JAVA', 'React', 'Go', 'DB', 'CSS', 'F#']
+    const matched = tagKeywords.find((k) => dto.title.toUpperCase().includes(k))
+    const tags = matched ? [dto.categoryName, matched] : [dto.categoryName]
+
     return {
         slug: dto.slug,
         title: dto.title,
@@ -41,6 +46,7 @@ function toPreviewFromRecent(dto: RecentArticleDto): ArticlePreview {
         status: dto.status,
         publishedAt: dto.publishedAt ?? '',
         readingTime: `${Math.max(1, Math.round(dto.description.split(/\s+/).filter(Boolean).length / WORDS_PER_MINUTE))} мин чтения`,
+        tags,
     }
 }
 

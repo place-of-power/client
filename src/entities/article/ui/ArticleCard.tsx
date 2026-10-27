@@ -59,6 +59,19 @@ class ArticleCard extends Component<ArticleCardProps> {
                         {article.description}
                     </p>
 
+                    <div className="mt-3 flex flex-wrap gap-1.5">
+                        {(article.tags && article.tags.length > 0 ? article.tags : [article.category.name]).map(
+                            (tag) => (
+                                <span
+                                    key={tag}
+                                    className="rounded-full bg-muted px-2 py-0.5 text-[0.65rem] font-medium text-muted-foreground"
+                                >
+                                    #{tag}
+                                </span>
+                            ),
+                        )}
+                    </div>
+
                     <div className="mt-auto flex items-center justify-between pt-4">
                         <div className="flex min-w-0 items-center gap-2.5">
                             <Avatar className="size-8 border">

@@ -10,6 +10,7 @@ export interface ArticlePreview {
     publishedAt: string
     readingTime: string
     cover?: string
+    tags?: string[]
 }
 
 export interface Article extends ArticlePreview {

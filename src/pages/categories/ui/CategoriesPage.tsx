@@ -53,8 +53,8 @@ class CategoriesPage extends Component<Record<string, never>, CategoriesPageStat
         const visible = this.visibleCategories()
 
         return (
-            <main className="mx-auto w-full max-w-[var(--container)] px-[var(--gutter)] pt-12 pb-16">
-                <header className="flex flex-col gap-5">
+            <main className="flex-1 bg-background">
+                <div className="mx-auto w-full max-w-[var(--container)] px-[var(--gutter)] pt-12 pb-16">
                     <div className="flex flex-wrap items-start justify-between gap-4">
                         <div>
                             <p className="text-xs font-semibold tracking-[0.18em] text-brand uppercase">
@@ -75,7 +75,7 @@ class CategoriesPage extends Component<Record<string, never>, CategoriesPageStat
                         </Button>
                     </div>
 
-                    <div className="flex flex-wrap items-center gap-2">
+                    <div className="mt-5 flex flex-wrap items-center gap-2">
                         {stats.map((stat) => (
                             <Badge
                                 key={stat.label}
@@ -88,94 +88,100 @@ class CategoriesPage extends Component<Record<string, never>, CategoriesPageStat
                         ))}
                     </div>
 
-                    <div className="flex w-full max-w-md items-center gap-2 rounded-full border bg-background px-4 shadow-sm">
+                    <form
+                        onSubmit={(event) => event.preventDefault()}
+                        className="mt-7 flex w-full max-w-md items-center gap-2 rounded-full border bg-background/70 p-1.5 pl-4 shadow-sm backdrop-blur"
+                    >
                         <Search className="size-4 shrink-0 text-muted-foreground" />
                         <Input
-                            type="search"
+                            type="text"
                             value={query}
                             onChange={this.handleQueryChange}
                             placeholder="Например, Rust или безопасность"
                             aria-label="Поиск по категориям"
-                            className="h-11 border-0 bg-transparent px-0 shadow-none focus-visible:ring-0"
+                            className="min-w-0 flex-1 h-9 border-0 bg-transparent px-0 text-sm outline-none shadow-none placeholder:text-muted-foreground focus-visible:ring-0"
                         />
-                    </div>
-                </header>
+                        <Button type="submit" size="sm" className="h-8 rounded-full bg-brand text-brand-foreground hover:opacity-90">
+                            Найти
+                        </Button>
+                    </form>
 
-                {visible.length === 0 ? (
-                    <div className="mt-10 rounded-2xl border border-dashed py-16 text-center">
-                        <p className="text-muted-foreground">
-                            По запросу «{query}» ничего не нашлось.
-                        </p>
-                    </div>
-                ) : (
-                    <div className="mt-10 grid grid-cols-1 gap-5 md:grid-cols-2">
-                        {visible.map((category) => {
-                            const Icon = category.icon
+                    {visible.length === 0 ? (
+                        <div className="mt-10 rounded-2xl border border-dashed bg-background py-16 text-center">
+                            <p className="text-muted-foreground">
+                                По запросу «{query}» ничего не нашлось.
+                            </p>
+                        </div>
+                    ) : (
+                        <div className="mt-10 grid grid-cols-1 gap-5 md:grid-cols-2">
+                            {visible.map((category) => {
+                                const Icon = category.icon
 
-                            return (
-                                <article
-                                    key={category.slug}
-                                    className="group relative overflow-hidden rounded-3xl border bg-card p-6 transition-all hover:shadow-lg"
-                                >
-                                    <div
-                                        className={cn(
-                                            'pointer-events-none absolute -top-16 -right-16 size-40 rounded-full bg-gradient-to-br opacity-0 blur-2xl transition-opacity duration-300 group-hover:opacity-25',
-                                            category.gradient,
-                                        )}
-                                    />
-                                    <div className="flex items-start gap-4">
-                                        <span
+                                return (
+                                    <article
+                                        key={category.slug}
+                                        className="group relative overflow-hidden rounded-3xl border bg-card p-6 transition-all hover:shadow-lg"
+                                    >
+                                        <div
                                             className={cn(
-                                                'grid size-12 shrink-0 place-items-center rounded-2xl bg-gradient-to-br text-white shadow-sm',
+                                                'pointer-events-none absolute -top-16 -right-16 size-40 rounded-full bg-gradient-to-br opacity-0 blur-2xl transition-opacity duration-300 group-hover:opacity-25',
                                                 category.gradient,
                                             )}
-                                        >
-                                            <Icon className="size-6" />
-                                        </span>
-                                        <div className="min-w-0">
-                                            <h2 className="text-lg font-semibold tracking-tight">
-                                                {category.name}
-                                            </h2>
-                                            <p className="mt-1 text-sm text-muted-foreground">
-                                                {category.description}
-                                            </p>
-                                        </div>
-                                        <span className="ml-auto shrink-0 rounded-full bg-muted px-2.5 py-1 text-[0.65rem] font-medium text-muted-foreground">
-                                            {category.subcategories.length}
-                                        </span>
-                                    </div>
-
-                                    <ul className="mt-5 grid grid-cols-1 gap-1.5 sm:grid-cols-2">
-                                        {category.subcategories.map((subcategory) => (
-                                            <li
-                                                key={subcategory.slug}
+                                        />
+                                        <div className="flex items-start gap-4">
+                                            <span
                                                 className={cn(
-                                                    'rounded-lg px-2.5 py-1.5',
-                                                    this.matches(subcategory.name) && 'bg-accent/60',
+                                                    'grid size-12 shrink-0 place-items-center rounded-2xl bg-gradient-to-br text-white shadow-sm',
+                                                    category.gradient,
                                                 )}
                                             >
-                                                <p className="text-sm font-medium">
-                                                    {subcategory.name}
+                                                <Icon className="size-6" />
+                                            </span>
+                                            <div className="min-w-0">
+                                                <h2 className="text-lg font-semibold tracking-tight text-foreground">
+                                                    {category.name}
+                                                </h2>
+                                                <p className="mt-1 text-sm text-muted-foreground">
+                                                    {category.description}
                                                 </p>
-                                                <p className="truncate text-[0.72rem] text-muted-foreground">
-                                                    {subcategory.description}
-                                                </p>
-                                            </li>
-                                        ))}
-                                    </ul>
+                                            </div>
+                                            <span className="ml-auto shrink-0 rounded-full bg-muted px-2.5 py-1 text-[0.65rem] font-medium text-muted-foreground">
+                                                {category.subcategories.length}
+                                            </span>
+                                        </div>
 
-                                    <Link
-                                        to={paths.category(category.slug)}
-                                        className="mt-5 inline-flex items-center gap-1.5 text-sm font-medium text-brand"
-                                    >
-                                        Все статьи категории
-                                        <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
-                                    </Link>
-                                </article>
-                            )
-                        })}
-                    </div>
-                )}
+                                        <ul className="mt-5 grid grid-cols-1 gap-1.5 sm:grid-cols-2">
+                                            {category.subcategories.map((subcategory) => (
+                                                <li
+                                                    key={subcategory.slug}
+                                                    className={cn(
+                                                        'rounded-lg px-2.5 py-1.5',
+                                                        this.matches(subcategory.name) && 'bg-accent/60',
+                                                    )}
+                                                >
+                                                    <p className="text-sm font-medium text-foreground">
+                                                        {subcategory.name}
+                                                    </p>
+                                                    <p className="truncate text-[0.72rem] text-muted-foreground">
+                                                        {subcategory.description}
+                                                    </p>
+                                                </li>
+                                            ))}
+                                        </ul>
+
+                                        <Link
+                                            to={paths.category(category.slug)}
+                                            className="mt-5 inline-flex items-center gap-1.5 text-sm font-medium text-brand"
+                                        >
+                                            Все статьи категории
+                                            <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+                                        </Link>
+                                    </article>
+                                )
+                            })}
+                        </div>
+                    )}
+                </div>
             </main>
         )
     }

@@ -7,7 +7,7 @@ import { paths } from '@/shared/config'
 import { deleteCategoryById, reorderCategoriesById } from '@/shared/lib'
 import type { Category } from '@/shared/model/category'
 import { CategoryForm } from '@/features/category-form'
-import { ConfirmDialog } from '@/shared/ui'
+import { FormCard, ConfirmDialog } from '@/shared/ui'
 import { Button, Input, Label, Textarea } from '@/shared/ui/kit'
 import { cn } from '@/shared/lib/cn'
 import './ManageCategoriesPage.css'
@@ -492,52 +492,34 @@ class AddSubcategoryDialog extends Component<AddSubcategoryDialogProps, AddSubca
                     <p className="create-dialog-description">
                         Подкатегория будет добавлена в категорию «{categoryName}».
                     </p>
-                    <form onSubmit={this.handleSubmit} className="w-full">
-                        <div className="w-full bg-card py-6">
-                            <div className="space-y-2">
-                                <Label htmlFor="subcategory-form-name">Название</Label>
-                                <Input
-                                    id="subcategory-form-name"
-                                    type="text"
-                                    value={name}
-                                    placeholder="Например, TypeScript"
-                                    onChange={this.handleChange}
-                                    autoFocus
-                                />
-                            </div>
-                            <div className="mt-5 space-y-2">
-                                <Label htmlFor="subcategory-form-description">Описание</Label>
-                                <Textarea
-                                    id="subcategory-form-description"
-                                    value={description}
-                                    placeholder="Краткое содержание подкатегории"
-                                    onChange={this.handleDescriptionChange}
-                                    rows={3}
-                                />
-                            </div>
-                            {error ? (
-                                <p className="mt-4 rounded-xl border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive">
-                                    {error}
-                                </p>
-                            ) : null}
-                            <div className="mt-5 flex justify-end gap-2">
-                                <Button
-                                    type="button"
-                                    variant="ghost"
-                                    onClick={onClose}
-                                    className="h-10 cursor-pointer rounded-full px-5"
-                                >
-                                    Отмена
-                                </Button>
-                                <Button
-                                    type="submit"
-                                    className="h-10 cursor-pointer rounded-full bg-brand px-5 text-brand-foreground hover:opacity-90"
-                                >
-                                    Добавить
-                                </Button>
-                            </div>
+                    <FormCard
+                        onSubmit={this.handleSubmit}
+                        error={error}
+                        submitLabel="Добавить"
+                        onCancel={onClose}
+                    >
+                        <div className="space-y-2">
+                            <Label htmlFor="subcategory-form-name">Название</Label>
+                            <Input
+                                id="subcategory-form-name"
+                                type="text"
+                                value={name}
+                                placeholder="Например, TypeScript"
+                                onChange={this.handleChange}
+                                autoFocus
+                            />
                         </div>
-                    </form>
+                        <div className="mt-5 space-y-2">
+                            <Label htmlFor="subcategory-form-description">Описание</Label>
+                            <Textarea
+                                id="subcategory-form-description"
+                                value={description}
+                                placeholder="Краткое содержание подкатегории"
+                                onChange={this.handleDescriptionChange}
+                                rows={3}
+                            />
+                        </div>
+                    </FormCard>
                 </div>
             </div>
         )

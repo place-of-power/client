@@ -1,8 +1,9 @@
 import { Component } from 'react'
-import type { ChangeEvent, SubmitEvent } from 'react'
+import type { ChangeEvent, FormEvent } from 'react'
 import { createCategoryById, slugify } from '@/shared/lib'
 import type { Category } from '@/shared/model'
-import { Button, Input, Label, Textarea } from '@/shared/ui/kit'
+import { FormCard } from '@/shared/ui'
+import { Input, Label, Textarea } from '@/shared/ui/kit'
 
 interface CategoryFormProps {
     onCreated: (category: Category) => void
@@ -51,7 +52,7 @@ class CategoryForm extends Component<CategoryFormProps, CategoryFormState> {
         this.setState({ description: event.target.value })
     }
 
-    handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
+    handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
 
         const { name, slug, sortOrder } = this.state
@@ -96,82 +97,60 @@ class CategoryForm extends Component<CategoryFormProps, CategoryFormState> {
         const { onCancel } = this.props
 
         return (
-            <form onSubmit={this.handleSubmit} className="w-full">
-                <div className="w-full bg-card py-6">
+            <FormCard
+                onSubmit={this.handleSubmit}
+                error={error}
+                submitLabel={submitting ? 'Создаём…' : 'Добавить категорию'}
+                busy={submitting}
+                onCancel={onCancel}
+            >
+                <div className="space-y-2">
+                    <Label htmlFor="category-form-name">Название</Label>
+                    <Input
+                        id="category-form-name"
+                        type="text"
+                        value={name}
+                        placeholder="Например, Go"
+                        onChange={this.handleNameChange}
+                    />
+                </div>
+
+                <div className="mt-5 space-y-2">
+                    <Label htmlFor="category-form-description">Описание</Label>
+                    <Textarea
+                        id="category-form-description"
+                        value={description}
+                        placeholder="Краткое содержание категории"
+                        onChange={this.handleDescriptionChange}
+                        rows={3}
+                    />
+                </div>
+
+                <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <div className="space-y-2">
-                        <Label htmlFor="category-form-name">Название</Label>
+                        <Label htmlFor="category-form-slug">Slug</Label>
                         <Input
-                            id="category-form-name"
+                            id="category-form-slug"
                             type="text"
-                            value={name}
-                            placeholder="Например, Go"
-                            onChange={this.handleNameChange}
+                            value={slug}
+                            placeholder="go"
+                            onChange={this.handleSlugChange}
                         />
                     </div>
 
-                    <div className="mt-5 space-y-2">
-                        <Label htmlFor="category-form-description">Описание</Label>
-                        <Textarea
-                            id="category-form-description"
-                            value={description}
-                            placeholder="Краткое содержание категории"
-                            onChange={this.handleDescriptionChange}
-                            rows={3}
+                    <div className="space-y-2">
+                        <Label htmlFor="category-form-sort-order">Порядок</Label>
+                        <Input
+                            id="category-form-sort-order"
+                            type="number"
+                            min={0}
+                            value={sortOrder}
+                            placeholder="0"
+                            onChange={this.handleSortOrderChange}
                         />
-                    </div>
-
-                    <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
-                        <div className="space-y-2">
-                            <Label htmlFor="category-form-slug">Slug</Label>
-                            <Input
-                                id="category-form-slug"
-                                type="text"
-                                value={slug}
-                                placeholder="go"
-                                onChange={this.handleSlugChange}
-                            />
-                        </div>
-
-                        <div className="space-y-2">
-                            <Label htmlFor="category-form-sort-order">Порядок</Label>
-                            <Input
-                                id="category-form-sort-order"
-                                type="number"
-                                min={0}
-                                value={sortOrder}
-                                placeholder="0"
-                                onChange={this.handleSortOrderChange}
-                            />
-                        </div>
-                    </div>
-
-                    {error ? (
-                        <p className="mt-4 rounded-xl border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive">
-                            {error}
-                        </p>
-                    ) : null}
-
-                    <div className="mt-5 flex justify-end gap-2">
-                        {onCancel ? (
-                            <Button
-                                type="button"
-                                variant="ghost"
-                                onClick={onCancel}
-                                className="h-10 cursor-pointer rounded-full px-5"
-                            >
-                                Отмена
-                            </Button>
-                        ) : null}
-                        <Button
-                            type="submit"
-                            disabled={submitting}
-                            className="h-10 rounded-full bg-brand px-5 text-brand-foreground hover:opacity-90"
-                        >
-                            {submitting ? 'Создаём…' : 'Добавить категорию'}
-                        </Button>
                     </div>
                 </div>
-            </form>
+            </FormCard>
         )
     }
 }

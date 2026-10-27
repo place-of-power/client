@@ -92,6 +92,7 @@ interface CreateState {
     authorName: string
     readTime: number | ''
     tagsInput: string
+    articleTags: string[]
     gradient: string
     blocks: ContentBlock[]
     errors: ErrorsState
@@ -118,6 +119,7 @@ class CreateArticlePage extends Component<Record<string, never>, CreateState> {
         authorName: '',
         readTime: '',
         tagsInput: '',
+        articleTags: [],
         gradient: GRADIENT_PRESETS[0].value,
         blocks: [],
         errors: {},
@@ -137,10 +139,7 @@ class CreateArticlePage extends Component<Record<string, never>, CreateState> {
     }
 
     private tagsList(): string[] {
-        return this.state.tagsInput
-            .split(',')
-            .map((tag) => tag.trim())
-            .filter(Boolean)
+        return this.state.articleTags
     }
 
     private finalReadTime(): number {
@@ -177,18 +176,19 @@ class CreateArticlePage extends Component<Record<string, never>, CreateState> {
     handleSubcategory = (value: string) => this.update('subcategorySlug', value)
 
     addTag = () => {
-        const tags = this.tagsList()
         const value = this.state.tagsInput.trim()
 
         if (!value) return
 
-        const joined = [...new Set([...tags, ...value.split(',').map((t) => t.trim()).filter(Boolean)])]
+        const incoming = value.split(',').map((t) => t.trim()).filter(Boolean)
+        const merged = [...new Set([...this.state.articleTags, ...incoming])]
 
-        this.update('tagsInput', joined.join(', '))
+        this.update('articleTags', merged)
+        this.update('tagsInput', '')
     }
 
     removeTag = (tag: string) => {
-        this.update('tagsInput', this.tagsList().filter((t) => t !== tag).join(', '))
+        this.update('articleTags', this.state.articleTags.filter((t) => t !== tag))
     }
 
     private updateBlock(index: number, patch: Partial<ContentBlock>) {
@@ -234,6 +234,7 @@ class CreateArticlePage extends Component<Record<string, never>, CreateState> {
             authorName: '',
             readTime: '',
             tagsInput: '',
+            articleTags: [],
             gradient: GRADIENT_PRESETS[0].value,
             blocks: [],
             errors: {},
@@ -707,7 +708,7 @@ class CreateArticlePage extends Component<Record<string, never>, CreateState> {
                                                 }}
                                                 placeholder="JavaScript, Замыкания, Основы"
                                                 aria-label="Введите тег"
-                                                className="h-8 flex-1 border-0 bg-transparent px-0 shadow-none focus-visible:ring-0"
+                                                className="h-8 flex-1 border-0 bg-transparent px-0 shadow-none focus-visible:ring-0 focus-visible:shadow-none"
                                             />
                                             <Button
                                                 type="button"

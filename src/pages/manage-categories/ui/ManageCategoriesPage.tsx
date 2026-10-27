@@ -3,6 +3,7 @@ import type { DragEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowLeft, ChevronDown, ChevronUp, GripVertical, Plus, Trash2 } from 'lucide-react'
 import { fetchCategories } from '@/shared/api'
+import { blogCategories } from '@/shared/api/mock/blog-categories'
 import { paths } from '@/shared/config'
 import { deleteCategoryById, reorderCategoriesById } from '@/shared/lib'
 import type { Category } from '@/shared/model/category'
@@ -216,36 +217,58 @@ class ManageCategoriesPage extends Component<Record<string, never>, ManageCatego
 
                 {!loading ? (
                     <ul className="mt-6 overflow-hidden rounded-2xl border bg-card">
-                        {categories.map((category, index) => (
-                            <li
-                                key={category.id}
-                                draggable
-                                onDragStart={this.handleDragStart(index)}
-                                onDragOver={this.handleDragOver}
-                                onDrop={this.handleDrop(index)}
-                                onDragEnd={this.handleDragEnd}
-                                className={cn(
-                                    'flex items-center gap-3 border-b p-4 last:border-b-0',
-                                    dragIndex === index && 'opacity-50',
-                                )}
-                            >
-                                <span className="cursor-grab text-muted-foreground active:cursor-grabbing">
-                                    <GripVertical className="size-5" />
-                                </span>
-                                <span className="min-w-0 flex-1 truncate text-sm font-medium">
-                                    {category.name}
-                                </span>
-                                <span className="hidden text-xs text-muted-foreground sm:inline">
-                                    /{category.slug}
-                                </span>
-                                <div className="flex items-center gap-1">
-                                    {moveUpButton(category, index)}
-                                    {moveDownButton(category, index)}
-                                    <span className="mx-1 h-5 w-px bg-border" />
-                                    {deleteButton(category, index)}
-                                </div>
-                            </li>
-                        ))}
+                        {categories.map((category, index) => {
+                            const profile = blogCategories.find(
+                                (item) => item.slug === category.slug,
+                            )
+
+                            return (
+                                <li
+                                    key={category.id}
+                                    draggable
+                                    onDragStart={this.handleDragStart(index)}
+                                    onDragOver={this.handleDragOver}
+                                    onDrop={this.handleDrop(index)}
+                                    onDragEnd={this.handleDragEnd}
+                                    className={cn(
+                                        'flex items-start gap-3 border-b p-4 last:border-b-0',
+                                        dragIndex === index && 'opacity-50',
+                                    )}
+                                >
+                                    <span className="mt-1 cursor-grab text-muted-foreground active:cursor-grabbing">
+                                        <GripVertical className="size-5" />
+                                    </span>
+                                    <div className="min-w-0 flex-1">
+                                        <div className="flex items-baseline gap-2">
+                                            <span className="truncate text-sm font-medium">
+                                                {category.name}
+                                            </span>
+                                            <span className="hidden text-xs text-muted-foreground sm:inline">
+                                                /{category.slug}
+                                            </span>
+                                        </div>
+                                        {profile && profile.subcategories.length > 0 ? (
+                                            <ul className="mt-1.5 flex flex-wrap gap-1">
+                                                {profile.subcategories.map((subcategory) => (
+                                                    <li
+                                                        key={subcategory.slug}
+                                                        className="rounded-full bg-muted px-2 py-0.5 text-[0.65rem] font-medium text-muted-foreground"
+                                                    >
+                                                        {subcategory.name}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        ) : null}
+                                    </div>
+                                    <div className="flex items-center gap-1">
+                                        {moveUpButton(category, index)}
+                                        {moveDownButton(category, index)}
+                                        <span className="mx-1 h-5 w-px bg-border" />
+                                        {deleteButton(category, index)}
+                                    </div>
+                                </li>
+                            )
+                        })}
                     </ul>
                 ) : null}
 

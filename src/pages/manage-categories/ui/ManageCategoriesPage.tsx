@@ -492,7 +492,7 @@ class AddSubcategoryDialog extends Component<AddSubcategoryDialogProps, AddSubca
                     <p className="create-dialog-description">
                         Подкатегория будет добавлена в категорию «{categoryName}».
                     </p>
-                    <form onSubmit={this.handleSubmit}>
+                    <form onSubmit={this.handleSubmit} className="w-full">
                         <div className="space-y-2">
                             <Label htmlFor="subcategory-form-name">Название</Label>
                             <Input
@@ -504,7 +504,7 @@ class AddSubcategoryDialog extends Component<AddSubcategoryDialogProps, AddSubca
                                 autoFocus
                             />
                         </div>
-                        <div className="mt-4 space-y-2">
+                        <div className="mt-5 space-y-2">
                             <Label htmlFor="subcategory-form-description">Описание</Label>
                             <Textarea
                                 id="subcategory-form-description"

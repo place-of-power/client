@@ -17,7 +17,7 @@ class FormCard extends Component<FormCardProps> {
 
         return (
             <form onSubmit={onSubmit} className="w-full">
-                <div className="w-full bg-card py-6">
+                <div className="w-full bg-card pt-6">
                     {children}
 
                     {error ? (

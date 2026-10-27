@@ -367,7 +367,7 @@ className={cn(
                                             ))}
                                         </ul>
                                     </div>
-                                    <div className="flex items-center self-center">
+                                    <div className="flex flex-col items-center self-center">
                                         <Button
                                             variant="ghost"
                                             size="icon"

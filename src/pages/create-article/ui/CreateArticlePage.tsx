@@ -695,32 +695,29 @@ class CreateArticlePage extends Component<Record<string, never>, CreateState> {
                                 <section className="rounded-2xl border bg-card p-6">
                                     <h2 className="text-lg font-bold tracking-tight">Теги</h2>
                                     <div className="mt-4 space-y-3">
-                                        <div className="flex items-center gap-2">
-                                            <div className="relative flex-1">
-                                                <Input
-                                                    value={state.tagsInput}
-                                                    onChange={this.handleTags}
-                                                    onKeyDown={(e) => {
-                                                        if (e.key === 'Enter') {
-                                                            e.preventDefault()
-                                                            this.addTag()
-                                                        }
-                                                    }}
-                                                    placeholder="JavaScript, Замыкания, Основы"
-                                                    aria-label="Введите тег"
-                                                    className="pr-10"
-                                                />
-                                                <Button
-                                                    type="button"
-                                                    variant="ghost"
-                                                    size="icon"
-                                                    onClick={this.addTag}
-                                                    aria-label="Добавить тег"
-                                                    className="absolute top-1/2 right-1 -translate-y-1/2"
-                                                >
-                                                    <Plus className="size-4" />
-                                                </Button>
-                                            </div>
+                                        <div className="flex items-center gap-2 rounded-full border bg-background/70 p-1.5 pl-4 shadow-sm backdrop-blur">
+                                            <Input
+                                                value={state.tagsInput}
+                                                onChange={this.handleTags}
+                                                onKeyDown={(e) => {
+                                                    if (e.key === 'Enter') {
+                                                        e.preventDefault()
+                                                        this.addTag()
+                                                    }
+                                                }}
+                                                placeholder="JavaScript, Замыкания, Основы"
+                                                aria-label="Введите тег"
+                                                className="h-8 flex-1 border-0 bg-transparent px-0 shadow-none focus-visible:ring-0"
+                                            />
+                                            <Button
+                                                type="button"
+                                                size="sm"
+                                                onClick={this.addTag}
+                                                aria-label="Добавить тег"
+                                                className="size-8 shrink-0 rounded-full bg-brand p-0 text-brand-foreground hover:opacity-90"
+                                            >
+                                                <Plus className="size-4" />
+                                            </Button>
                                         </div>
                                         {this.tagsList().length > 0 ? (
                                             <div className="flex flex-wrap gap-1.5">

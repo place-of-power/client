@@ -159,6 +159,15 @@ class ManageCategoriesPage extends Component<Record<string, never>, ManageCatego
         this.setState({ dragSub: null })
     }
 
+    handleSubDelete = (categorySlug: string, index: number) => () => {
+        const { subOrder } = this.state
+        const next = [...(subOrder[categorySlug] ?? [])]
+
+        this.setState({
+            subOrder: { ...subOrder, [categorySlug]: next.filter((_, itemIndex) => itemIndex !== index) },
+        })
+    }
+
     async persistOrder(next: Category[]) {
         const items = next.map((category, index) => ({ id: category.id, sortOrder: index }))
         const result = await reorderCategoriesById(items)
@@ -280,7 +289,20 @@ class ManageCategoriesPage extends Component<Record<string, never>, ManageCatego
                                                         <GripVertical className="size-3" />
                                                     </span>
                                                     <span className="size-1 rounded-full bg-current" />
-                                                    {subcategory.name}
+                                                    <span className="min-w-0 flex-1 truncate">
+                                                        {subcategory.name}
+                                                    </span>
+                                                    <button
+                                                        type="button"
+                                                        onClick={this.handleSubDelete(
+                                                            category.slug,
+                                                            subIndex,
+                                                        )}
+                                                        aria-label={`Удалить подкатегорию: ${subcategory.name}`}
+                                                        className="cursor-pointer text-muted-foreground transition-colors hover:text-destructive"
+                                                    >
+                                                        <Trash2 className="size-3.5" />
+                                                    </button>
                                                 </li>
                                             ))}
                                         </ul>

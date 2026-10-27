@@ -348,7 +348,7 @@ className={cn(
                                             ))}
                                         </ul>
                                     </div>
-                                    <div className="flex items-start">
+                                    <div className="flex items-center self-center">
                                         {deleteButton(category, categories.indexOf(category))}
                                     </div>
                                 </li>

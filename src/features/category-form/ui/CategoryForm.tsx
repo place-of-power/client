@@ -17,6 +17,8 @@ const CATEGORY_GRADIENTS = [
 
 type CategoryGradient = (typeof CATEGORY_GRADIENTS)[number]
 
+type Cover = CategoryGradient | `custom:${string}`
+
 interface CategoryFormProps {
     onCreated: (category: Category, cover?: string) => void
     onCancel?: () => void
@@ -26,7 +28,7 @@ interface CategoryFormState {
     name: string
     slug: string
     description: string
-    gradient: CategoryGradient
+    gradient: Cover
     sortOrder: string
     error: string
     slugEdited: boolean
@@ -66,8 +68,14 @@ class CategoryForm extends Component<CategoryFormProps, CategoryFormState> {
         this.setState({ description: event.target.value })
     }
 
-    handleGradient = (gradient: CategoryGradient) => {
+    handleGradient = (gradient: Cover) => {
         this.setState({ gradient })
+    }
+
+    handleCustomColor = (event: ChangeEvent<HTMLInputElement>) => {
+        const hex = event.target.value
+
+        this.setState({ gradient: `custom:${hex}` })
     }
 
     handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -163,6 +171,25 @@ class CategoryForm extends Component<CategoryFormProps, CategoryFormState> {
                                 )}
                             />
                         ))}
+                        <label
+                            className={cn(
+                                'relative flex h-10 items-center justify-center overflow-hidden rounded-lg border border-dashed transition-all',
+                                gradient.startsWith('custom:')
+                                    ? 'border-brand ring-2 ring-brand ring-offset-2 ring-offset-background'
+                                    : 'border-border hover:opacity-100',
+                            )}
+                        >
+                            <span className="text-[0.62rem] font-medium text-muted-foreground">
+                                Свой
+                            </span>
+                            <input
+                                type="color"
+                                value={gradient.startsWith('custom:') ? gradient.slice(7) : '#10b981'}
+                                onChange={this.handleCustomColor}
+                                className="absolute inset-0 cursor-pointer opacity-0"
+                                aria-label="Свой цвет кавера"
+                            />
+                        </label>
                     </div>
                 </div>
 

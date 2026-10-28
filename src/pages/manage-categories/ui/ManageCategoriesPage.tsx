@@ -34,6 +34,16 @@ interface ManageCategoriesPageState {
 }
 
 // shortcut: подкатегорий в API пока нет — показываем стабильное случайное число по slug
+function coverStyle(cover: string): { background?: string } {
+    if (cover.startsWith('custom:')) {
+        const hex = cover.slice(7)
+
+        return { background: `linear-gradient(135deg, ${hex}, ${hex}55 60%, ${hex}22)` }
+    }
+
+    return {}
+}
+
 function mockSubcategories(slug: string): Subcategory[] {
     const seed = [...slug].reduce((total, char) => total + char.charCodeAt(0), 0)
     const count = 2 + (seed % 4)
@@ -327,9 +337,12 @@ class ManageCategoriesPage extends Component<Record<string, never>, ManageCatego
                                     <div className="min-w-0 flex-1">
                                         {covers[category.slug] ? (
                                             <span
+                                                style={coverStyle(covers[category.slug])}
                                                 className={cn(
                                                     'mb-2 block h-8 w-20 rounded-md bg-gradient-to-br',
-                                                    covers[category.slug],
+                                                    covers[category.slug].startsWith('custom:')
+                                                        ? ''
+                                                        : covers[category.slug],
                                                 )}
                                             />
                                         ) : null}

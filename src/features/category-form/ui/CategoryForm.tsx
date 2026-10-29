@@ -137,6 +137,7 @@ class CategoryForm extends Component<CategoryFormProps, CategoryFormState> {
                         type="text"
                         value={name}
                         placeholder="Например, Go"
+                        maxLength={255}
                         onChange={this.handleNameChange}
                     />
                 </div>

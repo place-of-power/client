@@ -532,6 +532,7 @@ class AddSubcategoryDialog extends Component<AddSubcategoryDialogProps, AddSubca
                                 type="text"
                                 value={name}
                                 placeholder="Например, TypeScript"
+                                maxLength={255}
                                 onChange={this.handleChange}
                                 autoFocus
                             />
